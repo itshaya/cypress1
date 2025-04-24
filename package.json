@@ -13,6 +13,7 @@
     "@badeball/cypress-cucumber-preprocessor": "^22.0.1",
     "@bahmutov/cypress-esbuild-preprocessor": "^2.2.4",
     "@cucumber/cucumber": "^11.2.0",
+    "@types/cypress": "^1.1.6",
     "@types/node": "^22.14.1",
     "cypress": "^14.3.1",
     "esbuild": "^0.25.3",
