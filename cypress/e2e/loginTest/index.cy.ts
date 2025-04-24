@@ -21,10 +21,5 @@ describe("Testing login page ", () => {
       cy.contains('Username is required').should('be.visible');
       cy.contains('Password is required').should('be.visible');
    });
-
-
-
-
-
 });
 
