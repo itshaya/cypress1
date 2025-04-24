@@ -3,8 +3,8 @@ interface User {
   password: string
 }
 export const validUser: User = {
-  username: 'admin',
-  password: 'Admin2000'
+  username: Cypress.env('USERNAME'),
+  password: Cypress.env('PASSWORD')
 };
 
 export const invalidUser: User = {

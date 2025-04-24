@@ -16,7 +16,6 @@ When("I click the login button", () => {
     clickLoginButton();
 })
 
-
 Then("I should be redirected to the categories page", () => {
     cy.url().should("include", "/categories");
 });
