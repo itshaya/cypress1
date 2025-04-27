@@ -1,6 +1,6 @@
 import { emptyUserFields, invalidUser, validUser } from "../../fixtures/data";
-import { fillLoginFields, clickLoginButton } from "../../pageObjects/actions";
 import { Given, When, Then } from "@badeball/cypress-cucumber-preprocessor";
+import { LoginActions } from "../../pageObjects/actions";
 
 
 Given("I open the login page", () => {
@@ -9,11 +9,11 @@ Given("I open the login page", () => {
 
 // successfully login 
 When("I enter valid credentials", () => {
-    fillLoginFields(validUser.username, validUser.password);
+    LoginActions.fillLoginFields(validUser.username, validUser.password);
 });
 
 When("I click the login button", () => {
-    clickLoginButton();
+    LoginActions.clickLoginButton();
 })
 
 Then("I should be redirected to the categories page", () => {
@@ -23,7 +23,7 @@ Then("I should be redirected to the categories page", () => {
 // login with invalid credentials 
 
 When('I fill fields with invalid credentials', () => {
-    fillLoginFields(invalidUser.username, invalidUser.password);
+    LoginActions.fillLoginFields(invalidUser.username, invalidUser.password);
 });
 
 Then('The login should fail and I should not be redirected to the categories page', () => {
@@ -33,7 +33,7 @@ Then('The login should fail and I should not be redirected to the categories pag
 // login with empty fields  
 
 When('I try to leave the login fields empty', () => {
-    fillLoginFields(emptyUserFields.password, emptyUserFields.password);
+    LoginActions.fillLoginFields(emptyUserFields.password, emptyUserFields.password);
 })
 
 Then('The login should fail and see validation error messages', () => {
