@@ -4,7 +4,7 @@ import { Given, When, Then } from "@badeball/cypress-cucumber-preprocessor";
 
 
 Given("I open the login page", () => {
-    cy.visit("https://product-manager-1903f.web.app/sign-in");
+    cy.visit("/sign-in");
 });
 
 // successfully login 

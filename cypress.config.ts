@@ -6,7 +6,7 @@ import { addCucumberPreprocessorPlugin } from "@badeball/cypress-cucumber-prepro
 export default defineConfig({
   e2e: {
     baseUrl: "https://product-manager-1903f.web.app",
-    specPattern: "**/*.feature", // 👈 important
+    specPattern: "**/**/*.feature", // 👈 important
     async setupNodeEvents(on, config) {
       await addCucumberPreprocessorPlugin(on, config);
       on("file:preprocessor", createBundler({
