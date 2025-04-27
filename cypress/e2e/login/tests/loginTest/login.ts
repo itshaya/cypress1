@@ -1,6 +1,7 @@
 import { emptyUserFields, invalidUser, validUser } from "../../fixtures/data";
 import { Given, When, Then } from "@badeball/cypress-cucumber-preprocessor";
 import { LoginActions } from "../../pageObjects/actions";
+import { LoginAssertions } from "../../pageObjects/assertions";
 
 
 Given("I open the login page", () => {
@@ -17,7 +18,7 @@ When("I click the login button", () => {
 })
 
 Then("I should be redirected to the categories page", () => {
-    cy.url().should("include", "/categories");
+    LoginAssertions.verifyRedirectionToCategoriesPage();
 });
 
 // login with invalid credentials 
@@ -27,7 +28,7 @@ When('I fill fields with invalid credentials', () => {
 });
 
 Then('The login should fail and I should not be redirected to the categories page', () => {
-    cy.url().should('include', '/sign-in')
+    LoginAssertions.verifyStayInLoginPage();
 })
 
 // login with empty fields  
@@ -37,9 +38,7 @@ When('I try to leave the login fields empty', () => {
 })
 
 Then('The login should fail and see validation error messages', () => {
-    cy.contains('Username is required').should('be.visible');
-    cy.contains('Password is required').should('be.visible');
-    cy.url().should('include', '/sign-in')
+   LoginAssertions.verifyVisibilityValidationMessages();
 })
 
 
