@@ -5,7 +5,7 @@ import { LoginAssertions } from "../../pageObjects/assertions";
 
 
 Given("User open the login page", () => {
-    cy.visit("/sign-in");
+    LoginActions.openWebsite();
 });
 
 // successfully login 
