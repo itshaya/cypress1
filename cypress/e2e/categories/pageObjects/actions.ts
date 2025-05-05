@@ -59,4 +59,18 @@ export class CategoriesActions {
             }
         });
     }
+
+    static clickSortButton(clickNum: number, columnNum: number) {
+        if (clickNum === 1) {
+            cy.get('.sort-btn').eq(columnNum).click();
+        } else {
+            cy.get('.sort-btn').eq(columnNum).click();
+            cy.get('.sort-btn').eq(columnNum).click();
+        }
+    }
+
+    static typeInSearchField(searchTerm: string) {
+        cy.get('#search').clear().type(searchTerm);
+    }
+
 }
