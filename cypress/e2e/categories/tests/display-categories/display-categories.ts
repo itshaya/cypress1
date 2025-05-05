@@ -1,6 +1,8 @@
 import { Given, Then, When } from "@badeball/cypress-cucumber-preprocessor";
 import { CategoriesActions } from "../../pageObjects/actions";
 import { CategoriesAssertions } from "../../pageObjects/assertions";
+import { createTestCategory } from "../../utils";
+import { testCategory } from "../../fixtures/data";
 
 
 Given('The user is logged in', () => {
@@ -15,40 +17,54 @@ When('the list of categories is loaded', () => {
     CategoriesActions.getTablesRows();
 })
 
-Then('each category row should display a "Created At" timestamp in "YYYY-MM-DD HH:MM:SS" format', () => {
+Then('each category row should display a "Created At" timestamp in "YYYY-M-DD HH:M:S" format', () => {
     CategoriesAssertions.verifyCreatedAtFormat();
 })
 
-var pageNum: number;
 When('user clicks the "Next" or "Previous" button', () => {
-    cy.get('button').contains('Next').as('nextButton');
-    cy.get('.table-controls__actions').children('p').as('prevPageNum');
-    cy.get('@prevPageNum')
-        .invoke('text')
-        .then((text) => {
-            pageNum = Number(text.trim())
-        });
 
-    cy.get('@nextButton').click();
+    const numOfDisplayed = Number(cy.get('#query').invoke('text'));
+    cy.log("---------------------------------");
+    cy.log(numOfDisplayed.toString());
+    cy.log("---------------------------------");
+    for (let i = 0; i < numOfDisplayed + 1; i++) {
+        createTestCategory(testCategory);
+    }
+    CategoriesActions.storeCurrentCreatedAtTimestamps();
+    CategoriesActions.clickNextAndVerifyPageNumberIncreased();
 })
 
 Then('The system should navigate to the selected page and update the displayed categories', () => {
-    cy.get('.table-controls__actions')
-        .children('p')
-        .invoke('text')
-        .then((text) => {
-            const updatedPageNum = Number(text.trim());
-            expect(updatedPageNum).to.equal(pageNum + 1);
-        });
-})
-var itemNum: number;
-When('The user selects a specific number of items per page', () => {
-    cy.get('#query').select('10');
-    itemNum = 10;
+    CategoriesAssertions.verifyNewPageHasDifferentCategories()
 })
 
+var itemNum: number = 10;
+When('The user selects a specific number of items per page', () => {
+    CategoriesActions.selectItemsPerPage(itemNum);
+})
 Then('Then The system should display the selected number of categories per page', () => {
-    cy.get('.table-body')
-        .children()
-        .should('have.length', itemNum);
+    CategoriesAssertions.assertItemsPerPageDisplayed(itemNum);
+})
+
+When('user resizes the browser window or uses a mobile device', () => {
+    CategoriesActions.changeViewPortToDevice();
+})
+Then('The table layout should remain readable and properly formatted', () => {
+    CategoriesActions.verifyTableShouldRemainReadable();
+})
+
+When('The user reaches the last page', () => {
+    CategoriesActions.clickUntilDisabled();
+});
+
+Then('The "Next" button should be disabled', () => {
+    CategoriesAssertions.verifyNextButtonDisabled();
+})
+
+When('The user is on the first page of categories', () => {
+    CategoriesActions.openCategoriesPage();
+})
+
+Then('The "Previous" button should be disabled', () => {
+    CategoriesAssertions.verifyPreviousButtonDisabled();
 })
