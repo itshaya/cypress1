@@ -1,13 +1,13 @@
 import { currentCreatedAt } from "../utils";
 export class CategoriesAssertions {
-    private static TIME_REGEX =/^\d{4}-\d{1,2}-\d{1,2} \d{1,2}:\d{1,2}:\d{1,2}$/;
+    private static TIME_REGEX = /^\d{4}-\d{1,2}-\d{1,2} \d{1,2}:\d{1,2}:\d{1,2}$/;
 
-    private static normalizeDateStr(str:string):string {
+    private static normalizeDateStr(str: string): string {
         return str
-        .split(/[- :]/) 
-        .map((part) => part.padStart(2, '0')) 
-        .join('-')
-        .replace(/-(\d{2})-(\d{2})-(\d{2})-(\d{2})-(\d{2})/, ' $1:$2:$3');   
+            .split(/[- :]/)
+            .map((part) => part.padStart(2, '0'))
+            .join('-')
+            .replace(/-(\d{2})-(\d{2})-(\d{2})-(\d{2})-(\d{2})/, ' $1:$2:$3');
     }
 
     static verifyCreatedAtFormat() {
@@ -17,7 +17,7 @@ export class CategoriesAssertions {
                 .eq(1)
                 .invoke('text')
                 .invoke('trim')
-                .should('match',this.TIME_REGEX);
+                .should('match', this.TIME_REGEX);
         });
     }
 
@@ -71,7 +71,7 @@ export class CategoriesAssertions {
                 const parsedDate = new Date(text.replace(/-/g, '/'));
                 return parsedDate;
             });
-              
+
             const sortedDates = [...dates].sort((a, b) =>
                 sortType === 'ascending'
                     ? a.getDate() - b.getDate()
@@ -88,6 +88,34 @@ export class CategoriesAssertions {
             expect(cellText).to.include(searchTerm.toLowerCase());
         });
     }
+
+    static verifyVisibilityOfAddCategoryModal() {
+        cy.get('.modal').should('be.visible');
+    }
+
+    static verifyVisibilityOfNameRequiredMessage() {
+        cy.contains('Name is required').should('be.visible');
+    }
+
+    static assertCategoryIsVisible(name: string) {
+        cy.get('tbody.table-body td').contains(name).should('be.visible');
+    }
+
+    static verifySuccessMessageVisibility() {
+        cy.get('.go3958317564').should('be.visible');
+    }
+
+    static verifyCategoryExistMessageVisibility() {
+        cy.contains('This category already exist').should('be.visible')
+    }
+
+    static verifyCancellationProcessNotAdded(categoryIntercepted:boolean){
+        cy.then(() => {
+            expect(categoryIntercepted).to.be.false;
+        })
+    }
+
+    
 
 
 }
