@@ -2,11 +2,11 @@ import { Given, Then, When } from "@badeball/cypress-cucumber-preprocessor";
 import { CategoriesActions } from "../../pageObjects/actions";
 import { CategoriesAssertions } from "../../pageObjects/assertions";
 
-Given('The user is logged in', () => {
+beforeEach(() => {
     cy.login();
-});
+})
 
-Given('navigates to the Categories page', () => {
+Given('user navigates to the Categories page', () => {
     CategoriesActions.openCategoriesPage();
 });
 
@@ -28,7 +28,7 @@ Then('an error message should appear', () => {
 
 
 When('fills in the category name and submits', () => {
-    const name = 'TestCategory-' + Date.now();
+    const name = 'testCategory' + Date.now();
     CategoriesActions.storeCategoryName(name);
     CategoriesActions.addNewCategory(name);
 });
@@ -41,7 +41,7 @@ Then('the new category should appear in the categories list', () => {
 });
 
 When('the user successfully adds a new category', () => {
-    const categoryName = 'TestCategory-' + Date.now();
+    const categoryName = 'testCategory' + Date.now();
     CategoriesActions.addNewCategory(categoryName);
 });
 

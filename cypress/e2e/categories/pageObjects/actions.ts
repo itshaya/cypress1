@@ -129,7 +129,7 @@ export class CategoriesActions {
     static cancelAddingProcess(categoryIntercepted: boolean) {
         cy.intercept('POST', '**/categories', (req) => {
             categoryIntercepted = true;
-        }).as('addCategory');
+        });
         cy.get('button').contains('Cancel').click();
     }
 
