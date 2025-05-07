@@ -1,13 +1,18 @@
-import { Given, Then, When } from "@badeball/cypress-cucumber-preprocessor";
+import { AfterAll, BeforeAll, Given, Then, When } from "@badeball/cypress-cucumber-preprocessor";
 import { CategoriesActions } from "../../pageObjects/actions";
 import { CategoriesAssertions } from "../../pageObjects/assertions";
+import { createCategory, deleteAllTestedCategories } from "../../utils";
 
 
-Given('The user is logged in', () => {
-    cy.login()
+BeforeAll(() => {
+    createCategory(5);
 });
 
-Given('navigates to the Categories page', () => {
+beforeEach(() => {
+    cy.login();
+});
+
+Given('user navigates to the Categories page', () => {
     CategoriesActions.openCategoriesPage();
 })
 
@@ -50,4 +55,8 @@ When('The user enters {string} in the search field', (searchTerm: string) => {
 
 Then('Only categories with names including {string} should be displayed', (searchTerm: string) => {
     CategoriesAssertions.verifyCategoriesWithNameDisplayed(searchTerm);
-}); 
+});
+
+AfterAll(() => {
+    deleteAllTestedCategories();
+})
