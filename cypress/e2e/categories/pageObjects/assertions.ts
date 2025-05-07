@@ -1,14 +1,7 @@
 import { currentCreatedAt } from "../utils";
+import { CategoriesActions } from "./actions";
 export class CategoriesAssertions {
     private static TIME_REGEX = /^\d{4}-\d{1,2}-\d{1,2} \d{1,2}:\d{1,2}:\d{1,2}$/;
-
-    private static normalizeDateStr(str: string): string {
-        return str
-            .split(/[- :]/)
-            .map((part) => part.padStart(2, '0'))
-            .join('-')
-            .replace(/-(\d{2})-(\d{2})-(\d{2})-(\d{2})-(\d{2})/, ' $1:$2:$3');
-    }
 
     static verifyCreatedAtFormat() {
         cy.get('@table-rows').each(($row) => {
@@ -109,13 +102,32 @@ export class CategoriesAssertions {
         cy.contains('This category already exist').should('be.visible')
     }
 
-    static verifyCancellationProcessNotAdded(categoryIntercepted:boolean){
+    static verifyCancellationProcessNotAdded(categoryIntercepted: boolean) {
         cy.then(() => {
             expect(categoryIntercepted).to.be.false;
         })
     }
 
-    
+    static verifyEachCategoryHasEditButton() {
+        cy.get('.table-body tr').each(($tr) => {
+            cy.wrap($tr).find('td').eq(2).find('button').eq(1).should('be.visible');
+        });
+    }
 
+    static verifyEditFormOpenWithPrefieldCategoryName() {
+        const expectedName = Cypress.env('categoryName');
+        cy.get('#name').invoke('val').then((val) => {
+            expect(val?.toLocaleString().trim()).to.eq(expectedName);
+        });
+    }
+
+    static verifyCategoryUpdatedSuccessfully() {
+        cy.wait(1000);
+        cy.get('.table-body tr').eq(0).find('td').eq(0)
+            .invoke('text')
+            .then((text) => {
+                expect(text.trim()).to.eq(CategoriesActions.getCategoryName());
+            });
+    }
 
 }

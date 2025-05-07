@@ -2,8 +2,6 @@ import { pushCreatedAt, resetCreatedAt } from "../utils";
 
 export class CategoriesActions {
 
-    static existingCategoryName = ''
-
     static openCategoriesPage() {
         cy.visit('/categories');
     }
@@ -142,6 +140,47 @@ export class CategoriesActions {
         cy.intercept('POST', '**/categories', (req) => {
             categoryIntercepted = true;
         }).as('addCategory');
+        cy.get('button').contains('Cancel').click();
+    }
+
+    static displayTableCategories() {
+        cy.wait(500);
+        cy.get('table').should('be.visible');
+    }
+
+    static clickTheEditButton() {
+        let name = '';
+        cy.get('.table-body tr').eq(0).find('td').as('firstRow').eq(0)
+            .invoke('text')
+            .then((text) => {
+                name = text.trim();
+                Cypress.env('categoryName', name);
+            });
+        cy.get('@firstRow').eq(2).find('button').eq(1).click();
+    }
+
+    static clickEditButton() {
+        cy.get('.table-body tr').eq(0).find('td').eq(2).as('actions');
+        cy.get('@actions').find('button').eq(1).click();
+    }
+
+    static fillEditFormAndClick(name: string) {
+        this.clickEditButton();
+        cy.clearAndType('#name', name);
+        cy.get('button').contains('Submit').click();
+    }
+
+    static editCategoryWithNewName() {
+        const editedName = 'updated-category' + Date.now();
+        CategoriesActions.storeCategoryName(editedName);
+        this.fillEditFormAndClick(editedName);
+    }
+
+    static cancelCategoryEdit(categoryIntercepted: boolean) {
+        this.clickEditButton();
+        cy.intercept('PUT', '**/categories', (req) => {
+            categoryIntercepted = true;
+        }).as('editCategory');
         cy.get('button').contains('Cancel').click();
     }
 
