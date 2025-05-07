@@ -1,11 +1,11 @@
 import {testCategory } from "../fixtures/data";
 
-const postUrl = 'https://product-manager-1903f-default-rtdb.firebaseio.com/categories.json';
+export const url = 'https://product-manager-1903f-default-rtdb.firebaseio.com/categories.json';
 const deleteUrl = 'https://product-manager-1903f-default-rtdb.firebaseio.com/categories';
 
 export const createCategory = (num: number) => {
     while (num) {
-        cy.request('POST', postUrl, testCategory)
+        cy.request('POST', url, testCategory)
             .then((response) => {
                 expect(response.status).to.eq(200);
                 cy.log('new category created' + testCategory.name);
@@ -15,7 +15,7 @@ export const createCategory = (num: number) => {
 }
 
 export const deleteAllTestedCategories = () => {
-    cy.request('GET', `${postUrl}`)
+    cy.request('GET', `${url}`)
     .then((res) => {
       const data = res.body;
       for (const key in data) {

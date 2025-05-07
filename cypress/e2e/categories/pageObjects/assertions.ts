@@ -1,4 +1,5 @@
 import { CategoriesActions } from "./actions";
+import { url } from "../utils";
 export class CategoriesAssertions {
     private static TIME_REGEX = /^\d{4}-\d{1,2}-\d{1,2} \d{1,2}:\d{1,2}:\d{1,2}$/;
 
@@ -127,6 +128,21 @@ export class CategoriesAssertions {
             .then((text) => {
                 expect(text.trim()).to.eq(CategoriesActions.getCategoryName());
             });
+    }
+
+    static verifyCategoryRemovedFromTable() {
+        cy.request(url)
+            .then((response) => {
+                const data = response.body;
+                for (const key in data) {
+                    const category = data[key];
+                    expect(Cypress.env('deletedName')).to.not.equal(category?.name);
+                }
+            });
+    }
+
+    static verifyDeleteModalVisible() {
+        cy.get('.modal__content').should('be.visible');
     }
 
 }

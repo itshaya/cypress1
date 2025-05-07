@@ -27,7 +27,7 @@ export class CategoriesActions {
     }
 
     static selectItemsPerPage(num: number) {
-        cy.get('#query').select(num.toString(),{force: true});
+        cy.get('#query').select(num.toString(), { force: true });
     }
 
     static changeViewPortToDevice() {
@@ -173,5 +173,22 @@ export class CategoriesActions {
         }).as('editCategory');
         cy.get('button').contains('Cancel').click();
     }
+
+    static clickDeleteCategoryButton() {
+        cy.get('.table-body tr').eq(0).find('td').as('firstRow')
+        cy.get('@firstRow').eq(2).find('button').eq(0).click();
+    }
+
+    static deletesCategorySuccessfully() {
+        cy.get('.table-body tr').eq(0).find('td').as('firstRow').eq(0)
+            .invoke('text')
+            .then((text) => {
+                Cypress.env('deletedName', text.trim());
+            });
+        CategoriesActions.clickDeleteCategoryButton();
+        cy.get('button').contains('Submit').click();
+        cy.wait(500);
+    }
+
 
 }
