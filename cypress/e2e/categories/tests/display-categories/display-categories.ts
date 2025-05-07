@@ -1,15 +1,14 @@
-import { Given, Then, When } from "@badeball/cypress-cucumber-preprocessor";
+import {AfterAll, Given, Then, When } from "@badeball/cypress-cucumber-preprocessor";
 import { CategoriesActions } from "../../pageObjects/actions";
 import { CategoriesAssertions } from "../../pageObjects/assertions";
-import { createTestCategory } from "../../utils";
-import { testCategory } from "../../fixtures/data";
+import { createCategory,deleteAllTestedCategories } from "../../utils";
 
-
-Given('The user is logged in', () => {
-    cy.login()
-});
-
-Given('navigates to the Categories page', () => {
+beforeEach(() => {
+    cy.login();
+    cy.wait(500)
+    createCategory(1);
+})
+Given('user navigates to the Categories page', () => {
     CategoriesActions.openCategoriesPage();
 })
 
@@ -22,16 +21,9 @@ Then('each category row should display a "Created At" timestamp in "YYYY-M-DD HH
 })
 
 When('user clicks the "Next" or "Previous" button', () => {
-
-    const numOfDisplayed = Number(cy.get('#query').invoke('text'));
-    cy.log("---------------------------------");
-    cy.log(numOfDisplayed.toString());
-    cy.log("---------------------------------");
-    for (let i = 0; i < numOfDisplayed + 1; i++) {
-        createTestCategory(testCategory);
-    }
-    CategoriesActions.storeCurrentCreatedAtTimestamps();
-    CategoriesActions.clickNextAndVerifyPageNumberIncreased();
+    createCategory(5);
+    CategoriesActions.storeCurrentNames();
+    CategoriesActions.clickNextButton();
 })
 
 Then('The system should navigate to the selected page and update the displayed categories', () => {
@@ -40,6 +32,7 @@ Then('The system should navigate to the selected page and update the displayed c
 
 var itemNum: number = 10;
 When('The user selects a specific number of items per page', () => {
+    createCategory(itemNum);
     CategoriesActions.selectItemsPerPage(itemNum);
 })
 Then('Then The system should display the selected number of categories per page', () => {
@@ -67,4 +60,8 @@ When('The user is on the first page of categories', () => {
 
 Then('The "Previous" button should be disabled', () => {
     CategoriesAssertions.verifyPreviousButtonDisabled();
+})
+
+AfterAll(()=>{
+    deleteAllTestedCategories();
 })

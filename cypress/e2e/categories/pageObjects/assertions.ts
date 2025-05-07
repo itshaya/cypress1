@@ -1,4 +1,3 @@
-import { currentCreatedAt } from "../utils";
 import { CategoriesActions } from "./actions";
 export class CategoriesAssertions {
     private static TIME_REGEX = /^\d{4}-\d{1,2}-\d{1,2} \d{1,2}:\d{1,2}:\d{1,2}$/;
@@ -18,10 +17,10 @@ export class CategoriesAssertions {
         cy.get('tr.table-body-row').each(($row) => {
             cy.wrap($row)
                 .find('td')
-                .eq(1)
+                .eq(0)
                 .invoke('text')
-                .then((newCreatedAt) => {
-                    expect(currentCreatedAt).to.not.include(newCreatedAt.trim());
+                .then((newName) => {
+                    expect(Cypress.env('previousNames')).to.not.include(newName.trim());
                 });
         });
     }
@@ -29,7 +28,7 @@ export class CategoriesAssertions {
     static assertItemsPerPageDisplayed(num: number) {
         cy.get('.table-body')
             .children()
-            .should('have.length.at.most', num);
+            .should('have.length', num);
     }
 
     static verifyNextButtonDisabled() {

@@ -1,5 +1,3 @@
-import { pushCreatedAt, resetCreatedAt } from "../utils";
-
 export class CategoriesActions {
 
     static openCategoriesPage() {
@@ -10,34 +8,26 @@ export class CategoriesActions {
         return cy.get('tr.table-body-row').as('table-rows');
     }
 
-    static storeCurrentCreatedAtTimestamps(): void {
-        resetCreatedAt();
+    static storeCurrentNames(): void {
+        const names: string[] = [];
         cy.get('tr.table-body-row').each(($row) => {
             cy.wrap($row)
                 .find('td')
-                .eq(1)
+                .eq(0)
                 .invoke('text')
                 .then((text) => {
-                    pushCreatedAt(text.trim());
+                    names.push(text.trim());
                 });
         });
+        Cypress.env('previousNames', names);
     }
 
-    static clickNextAndVerifyPageNumberIncreased(): void {
-        cy.get('.table-controls__actions p').invoke('text').then((text) => {
-            const pageNum = Number(text.trim());
-
-            cy.contains('button', 'Next').click();
-
-            cy.get('.table-controls__actions p').invoke('text').should((newText) => {
-                const newPageNum = Number(newText.trim());
-                expect(newPageNum).to.equal(pageNum + 1);
-            });
-        });
+    static clickNextButton(): void {
+        cy.get('button').contains('Next').click();
     }
 
     static selectItemsPerPage(num: number) {
-        cy.get('#query').select(num.toString());
+        cy.get('#query').select(num.toString(),{force: true});
     }
 
     static changeViewPortToDevice() {

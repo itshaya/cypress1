@@ -1,27 +1,29 @@
-import { Category } from "../fixtures/data";
+import {testCategory } from "../fixtures/data";
 
-export let currentCreatedAt: string[] = [];
+const postUrl = 'https://product-manager-1903f-default-rtdb.firebaseio.com/categories.json';
+const deleteUrl = 'https://product-manager-1903f-default-rtdb.firebaseio.com/categories';
 
-export function resetCreatedAt() {
-    currentCreatedAt = [];
+export const createCategory = (num: number) => {
+    while (num) {
+        cy.request('POST', postUrl, testCategory)
+            .then((response) => {
+                expect(response.status).to.eq(200);
+                cy.log('new category created' + testCategory);
+            });
+        num--;
+    }
 }
 
-export function pushCreatedAt(timestamp: string) {
-    currentCreatedAt.push(timestamp);
-}
-
-export function createTestCategory(testCategory: Category) {
-    const timestamp = Date.now();
-
-    return cy.request({
-        method: "POST",
-        url: "https://product-manager-1903f-default-rtdb.firebaseio.com/categories.json",
-        body: {
-            id: testCategory.id ,
-            name: testCategory.name,
-            description: testCategory.description || " ",
-            createdAt: timestamp,
-            updateAt: timestamp
+export const deleteAllTestedCategories = () => {
+    cy.request('GET', `${postUrl}`)
+    .then((res) => {
+      const data = res.body;
+      for (const key in data) {
+        const category = data[key];
+        if (category.name?.includes('testCategory')) {
+          cy.request('DELETE', `${deleteUrl}/${key}.json`);
         }
+      }
     });
-}
+  };
+  
