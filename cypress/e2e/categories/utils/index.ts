@@ -8,7 +8,7 @@ export const createCategory = (num: number) => {
         cy.request('POST', postUrl, testCategory)
             .then((response) => {
                 expect(response.status).to.eq(200);
-                cy.log('new category created' + testCategory);
+                cy.log('new category created' + testCategory.name);
             });
         num--;
     }

@@ -1,10 +1,15 @@
-import { Given, Then, When } from "@badeball/cypress-cucumber-preprocessor";
+import { AfterAll, BeforeAll, Given, Then, When } from "@badeball/cypress-cucumber-preprocessor";
 import { CategoriesActions } from "../../pageObjects/actions";
 import { CategoriesAssertions } from "../../pageObjects/assertions";
+import { createCategory, deleteAllTestedCategories } from "../../utils";
+
+BeforeAll(() => {
+    createCategory(5);
+});
 
 beforeEach(() => {
     cy.login();
-})
+});
 
 Given('user navigates to the Categories page', () => {
     CategoriesActions.openCategoriesPage();
@@ -67,3 +72,7 @@ When('the user cancels the adding process', () => {
 Then('The category should not be added', () => {
     CategoriesAssertions.verifyCancellationProcessNotAdded(categoryIntercepted);
 });
+
+AfterAll(() => {
+    deleteAllTestedCategories();
+})
