@@ -1,12 +1,12 @@
 Feature: Edit Category Functionality
 
-  @TC_026
+  @smoke
   Scenario: Verify the Appearance of the Edit Button
     Given user navigates to the Categories page
     When the table of categories is displayed
     Then Each category should have an edit button beside it
 
-  @TC_027
+  @smoke
   Scenario: Verify Opening the Form Upon Clicking the Edit Button
     Given user navigates to the Categories page
     When the user clicks the edit button for a category

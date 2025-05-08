@@ -43,7 +43,7 @@ When('user resizes the browser window or uses a mobile device', () => {
     CategoriesActions.changeViewPortToDevice();
 })
 Then('The table layout should remain readable and properly formatted', () => {
-    CategoriesActions.verifyTableShouldRemainReadable();
+    CategoriesAssertions.verifyTableShouldRemainReadable();
 })
 
 When('The user reaches the last page', () => {

@@ -11,7 +11,7 @@ Feature: Delete Category Functionality
     Given user navigates to the Categories page
     When the user deletes a category successfully
     Then the category should be removed from the table
-  
+
   @TC_035
   Scenario: Verify Success Message Appears After Deletion
     Given user navigates to the Categories page

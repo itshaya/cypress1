@@ -1,5 +1,10 @@
 export class CategoriesActions {
 
+    private static clickEditButton() {
+        cy.get('.table-body tr').eq(0).find('td').eq(2).as('actions');
+        cy.get('@actions').find('button').eq(1).click();
+    }
+    
     static openCategoriesPage() {
         cy.visit('/categories');
     }
@@ -34,12 +39,6 @@ export class CategoriesActions {
         cy.viewport('iphone-6');
     }
 
-    static verifyTableShouldRemainReadable() {
-        cy.get('table').should('be.visible');
-        cy.get('table td').each(($el) => {
-            cy.wrap($el).should('not.be.empty');
-        });
-    }
 
     static clickUntilDisabled() {
         cy.get('button').contains('Next').then(($btn) => {
@@ -147,11 +146,6 @@ export class CategoriesActions {
                 Cypress.env('categoryName', name);
             });
         cy.get('@firstRow').eq(2).find('button').eq(1).click();
-    }
-
-    static clickEditButton() {
-        cy.get('.table-body tr').eq(0).find('td').eq(2).as('actions');
-        cy.get('@actions').find('button').eq(1).click();
     }
 
     static fillEditFormAndClick(name: string) {

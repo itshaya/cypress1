@@ -141,6 +141,13 @@ export class CategoriesAssertions {
             });
     }
 
+    static verifyTableShouldRemainReadable() {
+        cy.get('table').should('be.visible');
+        cy.get('table td').each(($el) => {
+            cy.wrap($el).should('not.be.empty');
+        });
+    }
+
     static verifyDeleteModalVisible() {
         cy.get('.modal__content').should('be.visible');
     }
