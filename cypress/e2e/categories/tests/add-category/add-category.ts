@@ -27,18 +27,16 @@ Then('an error message should appear', () => {
     CategoriesAssertions.verifyVisibilityOfNameRequiredMessage();
 });
 
-
+let typedName = ''
 When('fills in the category name and submits', () => {
-    const name = 'testCategory' + Date.now();
-    CategoriesActions.storeCategoryName(name);
-    CategoriesActions.addNewCategory(name);
+    typedName = 'testCategory' + Date.now();;
+    CategoriesActions.addNewCategory(typedName);
 });
 
 Then('the new category should appear in the categories list', () => {
-    const name = CategoriesActions.getCategoryName();
     CategoriesActions.selectItemsPerPage(50);
-    CategoriesActions.findCategoryAcrossPages(name);
-    CategoriesAssertions.assertCategoryIsVisible(name);
+    CategoriesActions.findCategoryAcrossPages(typedName);
+    CategoriesAssertions.assertCategoryIsVisible(typedName);
 });
 
 When('the user successfully adds a new category', () => {

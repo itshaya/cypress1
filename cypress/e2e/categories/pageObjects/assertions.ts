@@ -1,4 +1,3 @@
-import { CategoriesActions } from "./actions";
 import { url } from "../utils";
 export class CategoriesAssertions {
     private static TIME_REGEX = /^\d{4}-\d{1,2}-\d{1,2} \d{1,2}:\d{1,2}:\d{1,2}$/;
@@ -39,7 +38,7 @@ export class CategoriesAssertions {
     static verifyPreviousButtonDisabled() {
         cy.get('button').contains('Previous').should('be.disabled');
     }
-
+    
     static verifyCategoriesSortedByName(sortType: string) {
         const names: string[] = [];
 
@@ -56,7 +55,6 @@ export class CategoriesAssertions {
             expect(names).to.deep.equal(sortedNames);
         });
     }
-
     static verifyCategoriesSortedByCreatedAt(sortType: string) {
         cy.get('tr.table-body-row td:nth-child(2)').then(($cells) => {
             const dates = [...$cells].map((el) => {

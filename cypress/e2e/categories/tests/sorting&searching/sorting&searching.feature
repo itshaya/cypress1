@@ -27,5 +27,5 @@ Feature: Sorting and Searching Functionality
   @TC_014
   Scenario: Verify search filters categories correctly
     Given user navigates to the Categories page
-    When The user enters "Cat11" in the search field
-    Then Only categories with names including "Cat11" should be displayed
+    When The user enters "existed" in the search field
+    Then Only categories with names including "existed" should be displayed
