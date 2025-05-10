@@ -1,5 +1,5 @@
 import { AfterAll, BeforeAll, Given, Then, When } from "@badeball/cypress-cucumber-preprocessor";
-import { createCategory, deleteAllTestedCategories, url } from "../../utils";
+import { createCategory, deleteTestedCategories, url } from "../../utils";
 import { CategoriesActions } from "../../pageObjects/actions";
 import { CategoriesAssertions } from "../../pageObjects/assertions";
 
@@ -16,7 +16,7 @@ Given('user navigates to the Categories page', () => {
 });
 
 When('user clicks the delete button for a category', () => {
-     CategoriesActions.clickDeleteCategoryButton();
+    CategoriesActions.clickDeleteCategoryButton();
 });
 
 Then('a confirmation message should appear before the deletion is completed', () => {
@@ -24,7 +24,7 @@ Then('a confirmation message should appear before the deletion is completed', ()
 });
 
 When('the user deletes a category successfully', () => {
-   CategoriesActions.deletesCategorySuccessfully();
+    CategoriesActions.deletesCategorySuccessfully();
 })
 
 Then('the category should be removed from the table', () => {
@@ -36,5 +36,5 @@ Then('a success message should be displayed', () => {
 })
 
 AfterAll(() => {
-    deleteAllTestedCategories();
+    deleteTestedCategories();
 })

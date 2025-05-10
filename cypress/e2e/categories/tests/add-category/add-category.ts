@@ -1,11 +1,7 @@
-import { AfterAll, BeforeAll, Given, Then, When } from "@badeball/cypress-cucumber-preprocessor";
+import { AfterAll, Given, Then, When } from "@badeball/cypress-cucumber-preprocessor";
 import { CategoriesActions } from "../../pageObjects/actions";
 import { CategoriesAssertions } from "../../pageObjects/assertions";
-import { createCategory, deleteAllTestedCategories } from "../../utils";
-
-BeforeAll(() => {
-    createCategory(5);
-});
+import { createCategory, deleteTestedCategories } from "../../utils";
 
 beforeEach(() => {
     cy.login();
@@ -54,6 +50,10 @@ Then('A success message should appear', () => {
     CategoriesAssertions.verifySuccessMessageVisibility();
 });
 
+Given('there is a one category exist at least', () => {
+    createCategory(1);
+});
+
 When('the user tries to add a category with an existing name', () => {
     CategoriesActions.getExistingCategoryName((name) => {
         CategoriesActions.addNewCategory(name);
@@ -74,5 +74,5 @@ Then('The category should not be added', () => {
 });
 
 AfterAll(() => {
-    deleteAllTestedCategories();
-})
+    deleteTestedCategories();
+});

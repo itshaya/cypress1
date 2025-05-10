@@ -1,7 +1,7 @@
 import { AfterAll, BeforeAll, Given, Then, When } from "@badeball/cypress-cucumber-preprocessor";
 import { CategoriesActions } from "../../pageObjects/actions";
 import { CategoriesAssertions } from "../../pageObjects/assertions";
-import { createCategory, deleteAllTestedCategories } from "../../utils";
+import { createCategory, deleteTestedCategories } from "../../utils";
 
 
 BeforeAll(() => {
@@ -58,5 +58,5 @@ Then('Only categories with names including {string} should be displayed', (searc
 });
 
 AfterAll(() => {
-    deleteAllTestedCategories();
+    deleteTestedCategories();
 })

@@ -14,14 +14,14 @@ export class CategoriesAssertions {
         });
     }
 
-    static verifyNewPageHasDifferentCategories(): void {
+    static verifyNewPageHasDifferentCategories(names: string[]): void {
         cy.get('tr.table-body-row').each(($row) => {
             cy.wrap($row)
                 .find('td')
                 .eq(0)
                 .invoke('text')
                 .then((newName) => {
-                    expect(Cypress.env('previousNames')).to.not.include(newName.trim());
+                    expect(names).to.not.include(newName.trim());
                 });
         });
     }
@@ -114,20 +114,24 @@ export class CategoriesAssertions {
         });
     }
 
-    static verifyEditFormOpenWithPrefieldCategoryName() {
-        const expectedName = Cypress.env('categoryName');
-        cy.get('#name').invoke('val').then((val) => {
-            expect(val?.toLocaleString().trim()).to.eq(expectedName);
+    static verifyEditFormOpenWithPrefilledCategoryName() {
+        cy.get('@expectedCategoryName').then((aliasValue) => {
+            const expectedName = aliasValue;
+            cy.get('#name').invoke('val').then((actualValue) => {
+                expect(actualValue?.toString().trim()).to.eq(expectedName);
+            });
         });
     }
 
     static verifyCategoryUpdatedSuccessfully() {
         cy.wait(1000);
-        cy.get('.table-body tr').eq(0).find('td').eq(0)
-            .invoke('text')
-            .then((text) => {
-                expect(text.trim()).to.eq(CategoriesActions.getCategoryName());
-            });
+        cy.get('@newName').then((newName) => {
+            cy.get('.table-body tr').eq(0).find('td').eq(0)
+                .invoke('text')
+                .then((text) => {
+                    expect(text.trim()).to.eq(newName);
+                });
+        });
     }
 
     static verifyCategoryRemovedFromTable() {

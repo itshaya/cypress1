@@ -1,11 +1,11 @@
-import {AfterAll, Given, Then, When } from "@badeball/cypress-cucumber-preprocessor";
+import { Given, Then, When } from "@badeball/cypress-cucumber-preprocessor";
 import { CategoriesActions } from "../../pageObjects/actions";
 import { CategoriesAssertions } from "../../pageObjects/assertions";
-import { createCategory,deleteAllTestedCategories } from "../../utils";
+import { createCategory, deleteTestedCategories as deleteTestedCategories } from "../../utils";
 
+let names: string[] = [];
 beforeEach(() => {
     cy.login();
-    cy.wait(500)
     createCategory(1);
 })
 Given('user navigates to the Categories page', () => {
@@ -20,21 +20,28 @@ Then('each category row should display a "Created At" timestamp in "YYYY-M-DD HH
     CategoriesAssertions.verifyCreatedAtFormat();
 })
 
-When('user clicks the "Next" or "Previous" button', () => {
+Given('5 categories exist at least', () => {
     createCategory(5);
-    CategoriesActions.storeCurrentNames();
+});
+
+When('user clicks the "Next" or "Previous" button', () => {
+    CategoriesActions.storeCurrentNames(names);
     CategoriesActions.clickNextButton();
 })
 
 Then('The system should navigate to the selected page and update the displayed categories', () => {
-    CategoriesAssertions.verifyNewPageHasDifferentCategories()
+    CategoriesAssertions.verifyNewPageHasDifferentCategories(names);
 })
 
-var itemNum: number = 10;
-When('The user selects a specific number of items per page', () => {
+let itemNum: number = 10;
+Given('at least number of categories exist', () => {
     createCategory(itemNum);
+})
+
+When('The user selects a specific number of items per page', () => {
     CategoriesActions.selectItemsPerPage(itemNum);
 })
+
 Then('Then The system should display the selected number of categories per page', () => {
     CategoriesAssertions.assertItemsPerPageDisplayed(itemNum);
 })
@@ -62,6 +69,6 @@ Then('The "Previous" button should be disabled', () => {
     CategoriesAssertions.verifyPreviousButtonDisabled();
 })
 
-AfterAll(()=>{
-    deleteAllTestedCategories();
+afterEach(() => {
+    deleteTestedCategories();
 })

@@ -1,7 +1,7 @@
 import { Given, When, Then, BeforeAll, AfterAll } from "@badeball/cypress-cucumber-preprocessor";
 import { CategoriesActions } from "../../pageObjects/actions";
 import { CategoriesAssertions } from "../../pageObjects/assertions";
-import { createCategory, deleteAllTestedCategories } from "../../utils";
+import { createCategory, deleteTestedCategories } from "../../utils";
 
 
 BeforeAll(() => {
@@ -29,7 +29,7 @@ When('the user clicks the edit button for a category', () => {
 })
 
 Then('a form should open prefilled with the category name', () => {
-    CategoriesAssertions.verifyEditFormOpenWithPrefieldCategoryName();
+    CategoriesAssertions.verifyEditFormOpenWithPrefilledCategoryName();
 })
 
 When('the user edits the category and enters a new name', () => {
@@ -60,5 +60,5 @@ Then('the system should discard any changes and leave the category unchanged', (
 })
 
 AfterAll(() => {
-    deleteAllTestedCategories();
+    deleteTestedCategories();
 });

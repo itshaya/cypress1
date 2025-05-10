@@ -8,13 +8,12 @@ export const createCategory = (num: number) => {
         cy.request('POST', url, testCategory)
             .then((response) => {
                 expect(response.status).to.eq(200);
-                cy.log('new category created' + testCategory.name);
             });
         num--;
     }
 }
 
-export const deleteAllTestedCategories = () => {
+export const deleteTestedCategories = () => {
     cy.request('GET', `${url}`)
     .then((res) => {
       const data = res.body;

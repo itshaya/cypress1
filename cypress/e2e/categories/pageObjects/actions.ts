@@ -4,7 +4,7 @@ export class CategoriesActions {
         cy.get('.table-body tr').eq(0).find('td').eq(2).as('actions');
         cy.get('@actions').find('button').eq(1).click();
     }
-    
+
     static openCategoriesPage() {
         cy.visit('/categories');
     }
@@ -13,8 +13,7 @@ export class CategoriesActions {
         return cy.get('tr.table-body-row').as('table-rows');
     }
 
-    static storeCurrentNames(): void {
-        const names: string[] = [];
+    static storeCurrentNames(names: string[]) {
         cy.get('tr.table-body-row').each(($row) => {
             cy.wrap($row)
                 .find('td')
@@ -23,8 +22,7 @@ export class CategoriesActions {
                 .then((text) => {
                     names.push(text.trim());
                 });
-        });
-        Cypress.env('previousNames', names);
+        }).then(() => names);
     }
 
     static clickNextButton(): void {
@@ -138,12 +136,11 @@ export class CategoriesActions {
     }
 
     static clickTheEditButton() {
-        let name = '';
         cy.get('.table-body tr').eq(0).find('td').as('firstRow').eq(0)
             .invoke('text')
             .then((text) => {
-                name = text.trim();
-                Cypress.env('categoryName', name);
+                const categoryName = text.trim();
+                cy.wrap(categoryName).as('expectedCategoryName');
             });
         cy.get('@firstRow').eq(2).find('button').eq(1).click();
     }
@@ -156,7 +153,7 @@ export class CategoriesActions {
 
     static editCategoryWithNewName() {
         const editedName = 'updated-category' + Date.now();
-        CategoriesActions.storeCategoryName(editedName);
+        cy.wrap(editedName).as("newName");
         this.fillEditFormAndClick(editedName);
     }
 

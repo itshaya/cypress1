@@ -30,6 +30,7 @@ Feature: Add Category Functionality
   @TC_024
   Scenario: Verify Adding Duplicate Category Name is Not Allowed
     Given user navigates to the Categories page
+    And there is a one category exist at least
     When user clicks the Add Category button
     And the user tries to add a category with an existing name
     Then system should display a message indicating that the category name already exists

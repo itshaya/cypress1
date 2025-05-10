@@ -9,12 +9,14 @@ Feature: Display Categories in a Paginated Table
   @TC_002
   Scenario: :Verify that  user can navigate between pages using Next/Previous buttons
     Given user navigates to the Categories page
+    And 5 categories exist at least
     When user clicks the "Next" or "Previous" button
     Then The system should navigate to the selected page and update the displayed categories
 
   @TC_003
   Scenario: Verify that user can control the number of items displayed per page
     Given user navigates to the Categories page
+    And at least number of categories exist
     When The user selects a specific number of items per page
     Then Then The system should display the selected number of categories per page
 
