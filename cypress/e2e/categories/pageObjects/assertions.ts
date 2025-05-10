@@ -140,7 +140,7 @@ export class CategoriesAssertions {
                 const data = response.body;
                 for (const key in data) {
                     const category = data[key];
-                    expect(Cypress.env('deletedName')).to.not.equal(category?.name);
+                    expect(cy.get('@deletedName')).to.not.equal(category?.name);
                 }
             });
     }

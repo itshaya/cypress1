@@ -94,21 +94,9 @@ export class CategoriesActions {
         cy.get('button').contains('Submit').click();
     }
 
-    static saveCategoryName(categoryName: string): string {
-        let newName = categoryName;
-        return newName;
-    }
     static addNewCategory(newCategoryName: string) {
         cy.clearAndType('#name', newCategoryName);
         CategoriesActions.clickSubmitButton();
-    }
-
-    static storeCategoryName(name: string) {
-        Cypress.env('categoryName', name);
-    }
-
-    static getCategoryName(): string {
-        return Cypress.env('categoryName');
     }
 
     static getExistingCategoryName(callback: (name: string) => void): void {
@@ -174,7 +162,8 @@ export class CategoriesActions {
         cy.get('.table-body tr').eq(0).find('td').as('firstRow').eq(0)
             .invoke('text')
             .then((text) => {
-                Cypress.env('deletedName', text.trim());
+                const deletedName= text.trim();
+                cy.wrap(deletedName).as('deletedName')
             });
         CategoriesActions.clickDeleteCategoryButton();
         cy.get('button').contains('Submit').click();
