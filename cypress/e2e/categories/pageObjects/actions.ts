@@ -1,3 +1,5 @@
+import { ColumnName, SortingType } from "../fixtures/data";
+
 export class CategoriesActions {
 
     private static clickEditButton() {
@@ -51,12 +53,11 @@ export class CategoriesActions {
         cy.get('button').contains('Add Category').click();
     }
 
-    static clickSortButton(clickNum: number, columnNum: number) {
-        if (clickNum === 1) {
-            cy.get('.sort-btn').eq(columnNum).click();
-        } else {
-            cy.get('.sort-btn').eq(columnNum).click();
-            cy.get('.sort-btn').eq(columnNum).click();
+    static clickSortButton(columnName: ColumnName, sortType: SortingType) {
+        const columnIndex = columnName === "Name" ? 0 : 1;
+        cy.get('.sort-btn').eq(columnIndex).click();
+        if (sortType === "ascending") {
+            cy.get('.sort-btn').eq(columnIndex).click();
         }
     }
 
@@ -96,7 +97,7 @@ export class CategoriesActions {
 
     static addNewCategory(newCategoryName: string) {
         cy.clearAndType('#name', newCategoryName);
-        CategoriesActions.clickSubmitButton();
+        this.clickSubmitButton();
     }
 
     static getExistingCategoryName(callback: (name: string) => void): void {
@@ -162,10 +163,10 @@ export class CategoriesActions {
         cy.get('.table-body tr').eq(0).find('td').as('firstRow').eq(0)
             .invoke('text')
             .then((text) => {
-                const deletedName= text.trim();
+                const deletedName = text.trim();
                 cy.wrap(deletedName).as('deletedName')
             });
-        CategoriesActions.clickDeleteCategoryButton();
+        this.clickDeleteCategoryButton();
         cy.get('button').contains('Submit').click();
         cy.wait(500);
     }

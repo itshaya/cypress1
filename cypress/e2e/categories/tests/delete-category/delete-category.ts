@@ -1,10 +1,10 @@
 import { AfterAll, BeforeAll, Given, Then, When } from "@badeball/cypress-cucumber-preprocessor";
-import { createCategory, deleteTestedCategories, url } from "../../utils";
+import { createCategory, deleteTestedCategories, generateTestCategories, url } from "../../utils";
 import { CategoriesActions } from "../../pageObjects/actions";
 import { CategoriesAssertions } from "../../pageObjects/assertions";
 
 BeforeAll(() => {
-    createCategory(3);
+    createCategory(generateTestCategories(3));
 });
 
 beforeEach(() => {
@@ -19,11 +19,11 @@ When('user clicks the delete button for a category', () => {
     CategoriesActions.clickDeleteCategoryButton();
 });
 
-Then('a confirmation message should appear before the deletion is completed', () => {
+Then('a confirmation modal should appear', () => {
     CategoriesAssertions.verifyDeleteModalVisible();
 });
 
-When('the user deletes a category successfully', () => {
+When('the user confirms the deletion', () => {
     CategoriesActions.deletesCategorySuccessfully();
 })
 

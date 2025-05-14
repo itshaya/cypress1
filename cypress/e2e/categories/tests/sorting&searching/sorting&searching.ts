@@ -1,11 +1,11 @@
 import { AfterAll, BeforeAll, Given, Then, When } from "@badeball/cypress-cucumber-preprocessor";
 import { CategoriesActions } from "../../pageObjects/actions";
 import { CategoriesAssertions } from "../../pageObjects/assertions";
-import { createCategory, deleteTestedCategories } from "../../utils";
-
+import { createCategory, deleteTestedCategories, generateTestCategories, verifySortedColumn } from "../../utils";
+import { ColumnName, SortingType } from "../../fixtures/data";
 
 BeforeAll(() => {
-    createCategory(5);
+    createCategory(generateTestCategories(5));
 });
 
 beforeEach(() => {
@@ -17,36 +17,12 @@ Given('user navigates to the Categories page', () => {
 })
 
 
-When('The user sorts the "Name" column in ascending order', () => {
-    CategoriesActions.clickSortButton(2, 0);
-})
-
-Then('Categories should be displayed in ascending order according to name', () => {
-    CategoriesAssertions.verifyCategoriesSortedByName('ascending');
+When('the user sorts the {string} column in {word} order', (columnName: ColumnName, sortType: SortingType) => {
+    CategoriesActions.clickSortButton(columnName, sortType);
 });
 
-When('The user sorts the "Name" column in descending order', () => {
-    CategoriesActions.clickSortButton(1, 0);
-})
-
-Then('Categories should be displayed in descending order according to name', () => {
-    CategoriesAssertions.verifyCategoriesSortedByName('descending');
-})
-
-When('The user sorts the "CreatedAt" column in ascending order', () => {
-    CategoriesActions.clickSortButton(2, 1);
-})
-
-Then('Categories should be displayed in ascending order according to CreatedAt', () => {
-    CategoriesAssertions.verifyCategoriesSortedByCreatedAt('ascending');
-});
-
-When('The user sorts the "CreatedAt" column in descending order', () => {
-    CategoriesActions.clickSortButton(1, 1);
-})
-
-Then('Categories should be displayed in descending order according to CreatedAt', () => {
-    CategoriesAssertions.verifyCategoriesSortedByCreatedAt('descending');
+Then('categories should be displayed in {word} order according to {string}', (sortType: SortingType, columnName: ColumnName) => {
+    verifySortedColumn(columnName, sortType);
 });
 
 When('The user enters {string} in the search field', (searchTerm: string) => {

@@ -1,7 +1,11 @@
 import { AfterAll, Given, Then, When } from "@badeball/cypress-cucumber-preprocessor";
 import { CategoriesActions } from "../../pageObjects/actions";
 import { CategoriesAssertions } from "../../pageObjects/assertions";
-import { createCategory, deleteTestedCategories } from "../../utils";
+import { createCategory, deleteTestedCategories, generateTestCategory } from "../../utils";
+
+let typedName = ''
+const categoryIntercepted = false;
+let existingCategoryName: string;
 
 beforeEach(() => {
     cy.login();
@@ -27,7 +31,6 @@ Then('an error message should appear', () => {
     CategoriesAssertions.verifyVisibilityOfNameRequiredMessage();
 });
 
-let typedName = ''
 When('fills in the category name and submits', () => {
     typedName = 'testCategory' + Date.now();;
     CategoriesActions.addNewCategory(typedName);
@@ -35,7 +38,6 @@ When('fills in the category name and submits', () => {
 
 Then('the new category should appear in the categories list', () => {
     CategoriesActions.selectItemsPerPage(50);
-    CategoriesActions.findCategoryAcrossPages(typedName);
     CategoriesAssertions.assertCategoryIsVisible(typedName);
 });
 
@@ -49,20 +51,19 @@ Then('A success message should appear', () => {
 });
 
 Given('there is a one category exist at least', () => {
-    createCategory(1);
+    const category = generateTestCategory();
+    existingCategoryName = category.name;
+    createCategory([category]);
 });
 
 When('the user tries to add a category with an existing name', () => {
-    CategoriesActions.getExistingCategoryName((name) => {
-        CategoriesActions.addNewCategory(name);
-    });
+    CategoriesActions.addNewCategory(existingCategoryName);
 });
 
 Then('system should display a message indicating that the category name already exists', () => {
     CategoriesAssertions.verifyCategoryExistMessageVisibility();
 });
 
-let categoryIntercepted = false;
 When('the user cancels the adding process', () => {
     CategoriesActions.cancelAddingProcess(categoryIntercepted);
 });

@@ -1,12 +1,14 @@
 import { Given, Then, When } from "@badeball/cypress-cucumber-preprocessor";
 import { CategoriesActions } from "../../pageObjects/actions";
 import { CategoriesAssertions } from "../../pageObjects/assertions";
-import { createCategory, deleteTestedCategories as deleteTestedCategories } from "../../utils";
+import { createCategory, deleteTestedCategories as deleteTestedCategories, generateTestCategories } from "../../utils";
+import { testCategory } from "../../fixtures/data";
 
-let names: string[] = [];
+const itemNum: number = 10;
+const names: string[] = [];
 beforeEach(() => {
     cy.login();
-    createCategory(1);
+    createCategory([testCategory]);
 })
 Given('user navigates to the Categories page', () => {
     CategoriesActions.openCategoriesPage();
@@ -21,7 +23,7 @@ Then('each category row should display a "Created At" timestamp in "YYYY-M-DD HH
 })
 
 Given('5 categories exist at least', () => {
-    createCategory(5);
+    createCategory(generateTestCategories(5));
 });
 
 When('user clicks the "Next" or "Previous" button', () => {
@@ -33,9 +35,8 @@ Then('The system should navigate to the selected page and update the displayed c
     CategoriesAssertions.verifyNewPageHasDifferentCategories(names);
 })
 
-let itemNum: number = 10;
 Given('at least number of categories exist', () => {
-    createCategory(itemNum);
+    createCategory(generateTestCategories(itemNum));
 })
 
 When('The user selects a specific number of items per page', () => {

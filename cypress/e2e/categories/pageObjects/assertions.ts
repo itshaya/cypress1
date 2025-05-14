@@ -1,15 +1,16 @@
+import { SortingType } from "../fixtures/data";
 import { url } from "../utils";
 export class CategoriesAssertions {
-    private static TIME_REGEX = /^\d{4}-\d{1,2}-\d{1,2} \d{1,2}:\d{1,2}:\d{1,2}$/;
 
     static verifyCreatedAtFormat() {
+        const TIME_REGEX = /^\d{4}-\d{1,2}-\d{1,2} \d{1,2}:\d{1,2}:\d{1,2}$/;
         cy.get('@table-rows').each(($row) => {
             cy.wrap($row)
                 .find('td')
                 .eq(1)
                 .invoke('text')
                 .invoke('trim')
-                .should('match', this.TIME_REGEX);
+                .should('match', TIME_REGEX);
         });
     }
 
@@ -38,8 +39,8 @@ export class CategoriesAssertions {
     static verifyPreviousButtonDisabled() {
         cy.get('button').contains('Previous').should('be.disabled');
     }
-    
-    static verifyCategoriesSortedByName(sortType: string) {
+
+    static verifyCategoriesSortedByName(sortType: SortingType) {
         const names: string[] = [];
 
         cy.get('tr.table-body-row td:first-child').each(($el) => {
@@ -55,7 +56,7 @@ export class CategoriesAssertions {
             expect(names).to.deep.equal(sortedNames);
         });
     }
-    static verifyCategoriesSortedByCreatedAt(sortType: string) {
+    static verifyCategoriesSortedByCreatedAt(sortType: SortingType) {
         cy.get('tr.table-body-row td:nth-child(2)').then(($cells) => {
             const dates = [...$cells].map((el) => {
                 const text = el.textContent?.trim() || '';

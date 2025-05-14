@@ -1,9 +1,7 @@
 declare namespace Cypress {
     interface Chainable<Subject = any> {
-        clearAndType(selector: string, value: string): Chainable<any>;
-    }
-    interface Chainable<Subject = any> {
         login(): Chainable<any>
+        clearAndType(selector: string, value: string): Chainable<any>;
     }
 }
 

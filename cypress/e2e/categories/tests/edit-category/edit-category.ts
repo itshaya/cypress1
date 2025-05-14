@@ -1,11 +1,13 @@
 import { Given, When, Then, BeforeAll, AfterAll } from "@badeball/cypress-cucumber-preprocessor";
 import { CategoriesActions } from "../../pageObjects/actions";
 import { CategoriesAssertions } from "../../pageObjects/assertions";
-import { createCategory, deleteTestedCategories } from "../../utils";
+import { createCategory, deleteTestedCategories, generateTestCategories } from "../../utils";
 
+
+const categoryIntercepted = false;
 
 BeforeAll(() => {
-    createCategory(3);
+    createCategory(generateTestCategories(3));
 });
 
 beforeEach(() => {
@@ -50,7 +52,6 @@ Then('The system should prevent the edit and display a validation message', () =
     CategoriesAssertions.verifyCategoryExistMessageVisibility();
 })
 
-let categoryIntercepted = false;
 When('the user attempts to edit a category name and cancels the edit process', () => {
     CategoriesActions.cancelCategoryEdit(categoryIntercepted);
 })
