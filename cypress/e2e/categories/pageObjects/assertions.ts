@@ -1,3 +1,4 @@
+import cypress from "cypress";
 import { SortingType } from "../fixtures/data";
 import { url } from "../utils";
 export class CategoriesAssertions {
@@ -40,13 +41,16 @@ export class CategoriesAssertions {
         cy.get('button').contains('Previous').should('be.disabled');
     }
 
+  
     static verifyCategoriesSortedByName(sortType: SortingType) {
         const names: string[] = [];
 
         cy.get('tr.table-body-row td:first-child').each(($el) => {
-            names.push($el.text().trim());
+            names.push($el.text().trim().toLowerCase());
         }).then(() => {
             let sortedNames;
+            console.log(...names);
+
             if (sortType === 'ascending') {
                 sortedNames = [...names].sort((a, b) => a.localeCompare(b));
             } else {
