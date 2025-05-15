@@ -49,12 +49,10 @@ export class CategoriesAssertions {
             names.push($el.text().trim());
         }).then(() => {
             let sortedNames;
-            console.log(...names);
-
             if (sortType === 'ascending') {
-                sortedNames = [...names].sort((a, b) => a.localeCompare(b, undefined, { sensitivity: 'base' }));
+                sortedNames = [...names].sort((a, b) => a.localeCompare(b, 'en', { sensitivity: 'base' }));
             } else {
-                sortedNames = [...names].sort((a, b) => b.localeCompare(a, undefined, { sensitivity: 'base' }));
+                sortedNames = [...names].sort((a, b) => b.localeCompare(a, 'en', { sensitivity: 'base' }));
             }
 
             expect(names).to.deep.equal(sortedNames);
