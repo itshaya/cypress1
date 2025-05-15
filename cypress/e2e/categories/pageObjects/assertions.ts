@@ -41,7 +41,7 @@ export class CategoriesAssertions {
         cy.get('button').contains('Previous').should('be.disabled');
     }
 
-  
+
     static verifyCategoriesSortedByName(sortType: SortingType) {
         const names: string[] = [];
 
@@ -56,6 +56,9 @@ export class CategoriesAssertions {
             } else {
                 sortedNames = [...names].sort((a, b) => b.localeCompare(a));
             }
+
+            console.log('DOM Order:', names);
+            console.log('Expected Order:', sortedNames);
 
             expect(names).to.deep.equal(sortedNames);
         });
