@@ -17,5 +17,5 @@ Feature: Sorting and Searching Functionality
 
   @TC_014
   Scenario: Verify search filters categories correctly
-    When The user enters "Ice-cream" in the search field
-    Then Only categories with names including "Ice-cream" should be displayed
+    When The user enters "cd" in the search field
+    Then Only categories with names including "cd" should be displayed
