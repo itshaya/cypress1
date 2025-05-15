@@ -52,9 +52,9 @@ export class CategoriesAssertions {
             console.log(...names);
 
             if (sortType === 'ascending') {
-                sortedNames = [...names].sort((a, b) => a.localeCompare(b));
+                sortedNames = [...names].sort((a, b) => a.localeCompare(b, undefined, { sensitivity: 'base' }));
             } else {
-                sortedNames = [...names].sort((a, b) => b.localeCompare(a));
+                sortedNames = [...names].sort((a, b) => b.localeCompare(a, undefined, { sensitivity: 'base' }));
             }
 
             expect(names).to.deep.equal(sortedNames);
