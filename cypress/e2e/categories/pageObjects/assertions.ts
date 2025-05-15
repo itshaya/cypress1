@@ -46,7 +46,7 @@ export class CategoriesAssertions {
         const names: string[] = [];
 
         cy.get('tr.table-body-row td:first-child').each(($el) => {
-            names.push($el.text().trim().toLowerCase());
+            names.push($el.text().trim());
         }).then(() => {
             let sortedNames;
             console.log(...names);
