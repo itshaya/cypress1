@@ -166,7 +166,6 @@ export class CategoriesActions {
                 const deletedName = text.trim();
                 cy.wrap(deletedName).as('deletedName')
             });
-        this.clickDeleteCategoryButton();
         cy.get('button').contains('Submit').click();
         cy.wait(500);
     }
