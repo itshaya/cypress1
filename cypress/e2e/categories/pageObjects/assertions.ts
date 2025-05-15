@@ -42,62 +42,22 @@ export class CategoriesAssertions {
     }
 
 
-    // static verifyCategoriesSortedByName(sortType: SortingType) {
-    //     const names: string[] = [];
-
-    //     cy.get('tr.table-body-row td:first-child').each(($el) => {
-    //         names.push($el.text().trim());
-    //     }).then(() => {
-    //         let sortedNames;
-    //         if (sortType === 'ascending') {
-    //             sortedNames = [...names].sort((a, b) => a.localeCompare(b, 'en', { sensitivity: 'base' }));
-    //         } else {
-    //             sortedNames = [...names].sort((a, b) => b.localeCompare(a, 'en', { sensitivity: 'base' }));
-    //         }
-
-    //         expect(names).to.deep.equal(sortedNames);
-    //     });
-    // }
-
-    // static verifyCategoriesSortedByName(sortType: SortingType) {
-    //     cy.get('tr.table-body-row td:first-child').then(($cells) => {
-    //         const names = [...$cells].map(el => el.textContent?.trim().toLowerCase() || '');
-
-    //         const sortedNames = [...names].sort((a, b) => {
-    //             if (a < b) return sortType === 'ascending' ? -1 : 1;
-    //             if (a > b) return sortType === 'ascending' ? 1 : -1;
-    //             return 0;
-    //         });
-
-    //         console.log('Actual:', names);
-    //         console.log('Expected:', sortedNames);
-
-    //         expect(names).to.deep.equal(sortedNames);
-    //     });
-    // }
-
     static verifyCategoriesSortedByName(sortType: SortingType) {
-        cy.get('table').should('exist');
+        const names: string[] = [];
 
-        cy.wait(1000);
+        cy.get('tr.table-body-row td:first-child').each(($el) => {
+            names.push($el.text().trim());
+        }).then(() => {
+            let sortedNames;
+            if (sortType === 'ascending') {
+                sortedNames = [...names].sort((a, b) => a.localeCompare(b, 'en', { sensitivity: 'base' }));
+            } else {
+                sortedNames = [...names].sort((a, b) => b.localeCompare(a, 'en', { sensitivity: 'base' }));
+            }
 
-        cy.get('tr.table-body-row td:first-child').then(($cells) => {
-            const names = [...$cells].map(el => el.textContent?.trim().toLowerCase() || '');
-
-            const sortedNames = [...names].sort((a, b) => {
-                if (a < b) return sortType === 'ascending' ? -1 : 1;
-                if (a > b) return sortType === 'ascending' ? 1 : -1;
-                return 0;
-            });
-
-            console.log(' Actual names:', names);
-            console.log(' Expected sorted:', sortedNames);
-
-            
-            expect(names, 'Category names should be sorted correctly').to.deep.equal(sortedNames);
+            expect(names).to.deep.equal(sortedNames);
         });
     }
-
 
 
     static verifyCategoriesSortedByCreatedAt(sortType: SortingType) {
