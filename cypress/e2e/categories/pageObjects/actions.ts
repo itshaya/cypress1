@@ -169,6 +169,7 @@ export class CategoriesActions {
         cy.get('button').contains('Submit').click();
         cy.wait(500);
     }
+    
 
 
 }
