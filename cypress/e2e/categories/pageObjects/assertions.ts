@@ -57,9 +57,6 @@ export class CategoriesAssertions {
                 sortedNames = [...names].sort((a, b) => b.localeCompare(a));
             }
 
-            console.log('DOM Order:', names);
-            console.log('Expected Order:', sortedNames);
-
             expect(names).to.deep.equal(sortedNames);
         });
     }
