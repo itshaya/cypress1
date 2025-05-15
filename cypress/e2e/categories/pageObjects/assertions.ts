@@ -42,22 +42,40 @@ export class CategoriesAssertions {
     }
 
 
-    static verifyCategoriesSortedByName(sortType: SortingType) {
-        const names: string[] = [];
+    // static verifyCategoriesSortedByName(sortType: SortingType) {
+    //     const names: string[] = [];
 
-        cy.get('tr.table-body-row td:first-child').each(($el) => {
-            names.push($el.text().trim());
-        }).then(() => {
-            let sortedNames;
-            if (sortType === 'ascending') {
-                sortedNames = [...names].sort((a, b) => a.localeCompare(b, 'en', { sensitivity: 'base' }));
-            } else {
-                sortedNames = [...names].sort((a, b) => b.localeCompare(a, 'en', { sensitivity: 'base' }));
-            }
+    //     cy.get('tr.table-body-row td:first-child').each(($el) => {
+    //         names.push($el.text().trim());
+    //     }).then(() => {
+    //         let sortedNames;
+    //         if (sortType === 'ascending') {
+    //             sortedNames = [...names].sort((a, b) => a.localeCompare(b, 'en', { sensitivity: 'base' }));
+    //         } else {
+    //             sortedNames = [...names].sort((a, b) => b.localeCompare(a, 'en', { sensitivity: 'base' }));
+    //         }
+
+    //         expect(names).to.deep.equal(sortedNames);
+    //     });
+    // }
+
+    static verifyCategoriesSortedByName(sortType: SortingType) {
+        cy.get('tr.table-body-row td:first-child').then(($cells) => {
+            const names = [...$cells].map(el => el.textContent?.trim() || '');
+
+            const sortedNames = [...names].sort((a, b) =>
+                sortType === 'ascending'
+                    ? a.localeCompare(b, 'en', { sensitivity: 'base' })
+                    : b.localeCompare(a, 'en', { sensitivity: 'base' })
+            );
+
+            console.log('Actual DOM order:', names);
+            console.log('Expected sorted order:', sortedNames);
 
             expect(names).to.deep.equal(sortedNames);
         });
     }
+
     static verifyCategoriesSortedByCreatedAt(sortType: SortingType) {
         cy.get('tr.table-body-row td:nth-child(2)').then(($cells) => {
             const dates = [...$cells].map((el) => {

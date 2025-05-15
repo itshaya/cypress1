@@ -17,5 +17,5 @@ Feature: Sorting and Searching Functionality
 
   @TC_014
   Scenario: Verify search filters categories correctly
-    When The user enters "www" in the search field
-    Then Only categories with names including "www" should be displayed
+    When The user enters "existed" in the search field
+    Then Only categories with names including "existed" should be displayed
