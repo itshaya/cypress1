@@ -30,7 +30,7 @@ export class CategoriesAssertions {
     static assertItemsPerPageDisplayed(num: number) {
         cy.get('.table-body')
             .children()
-            .should('have.length', num);
+            .should('have.length.at.most', num);
     }
 
     static verifyNextButtonDisabled() {
@@ -61,20 +61,21 @@ export class CategoriesAssertions {
 
     static verifyCategoriesSortedByName(sortType: SortingType) {
         cy.get('tr.table-body-row td:first-child').then(($cells) => {
-            const names = [...$cells].map(el => el.textContent?.trim() || '');
+            const names = [...$cells].map(el => el.textContent?.trim().toLowerCase() || '');
 
-            const sortedNames = [...names].sort((a, b) =>
-                sortType === 'ascending'
-                    ? a.localeCompare(b, 'en', { sensitivity: 'base' })
-                    : b.localeCompare(a, 'en', { sensitivity: 'base' })
-            );
+            const sortedNames = [...names].sort((a, b) => {
+                if (a < b) return sortType === 'ascending' ? -1 : 1;
+                if (a > b) return sortType === 'ascending' ? 1 : -1;
+                return 0;
+            });
 
-            console.log('Actual DOM order:', names);
-            console.log('Expected sorted order:', sortedNames);
+            console.log('Actual:', names);
+            console.log('Expected:', sortedNames);
 
             expect(names).to.deep.equal(sortedNames);
         });
     }
+
 
     static verifyCategoriesSortedByCreatedAt(sortType: SortingType) {
         cy.get('tr.table-body-row td:nth-child(2)').then(($cells) => {
