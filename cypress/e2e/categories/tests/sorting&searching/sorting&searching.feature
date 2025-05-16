@@ -13,7 +13,7 @@ Feature: Sorting and Searching Functionality
       | Name       | descending |
       | CreatedAt  | ascending  |
       | CreatedAt  | descending |
-
+ 
   @TC_014
   Scenario: Verify search filters categories correctly
     When The user enters "cd" in the search field
