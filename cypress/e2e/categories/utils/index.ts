@@ -34,7 +34,7 @@ export const deleteTestedCategories = () => {
       const data = res.body;
       for (const key in data) {
         const category = data[key];
-        if (category.name?.includes('testCategory')) {
+        if (category.name?.includes('testCategory') || category.name?.startsWith('searchItem')) {
           cy.request('DELETE', `${deleteUrl}/${key}.json`);
         }
       }
