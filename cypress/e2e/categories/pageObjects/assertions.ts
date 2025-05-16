@@ -42,39 +42,23 @@ export class CategoriesAssertions {
     }
 
 
-    // static verifyCategoriesSortedByName(sortType: SortingType) {
-    //     const names: string[] = [];
-
-    //     cy.get('tr.table-body-row td:first-child').each(($el) => {
-    //         names.push($el.text().trim());
-    //     }).then(() => {
-    //         let sortedNames;
-    //         if (sortType === 'ascending') {
-    //             sortedNames = [...names].sort((a, b) => a.localeCompare(b, 'en', { sensitivity: 'base' }));
-    //         } else {
-    //             sortedNames = [...names].sort((a, b) => b.localeCompare(a, 'en', { sensitivity: 'base' }));
-    //         }
-
-    //         expect(names).to.deep.equal(sortedNames);
-    //     });
-    // }
-
     static verifyCategoriesSortedByName(sortType: SortingType) {
-       
-        cy.get('tr.table-body-row').should('have.length.greaterThan', 0);
+        const names: string[] = [];
 
-       
-        cy.get('tr.table-body-row td:first-child').then(($cells) => {
-            const names = Array.from($cells, el => el.textContent?.trim().toLowerCase() || '');
+        cy.get('tr.table-body-row td:first-child').each(($el) => {
+            names.push($el.text().trim());
+        }).then(() => {
 
-            const expected = [...names].sort((a, b) =>
-                sortType === 'ascending'
-                    ? a.localeCompare(b)
-                    : b.localeCompare(a)
-            );
-
+            console.log("actaul" + names);
+            let sortedNames;
+            if (sortType === 'ascending') {
+                sortedNames = [...names].sort((a, b) => a.localeCompare(b, 'en', { sensitivity: 'base' }));
+            } else {
+                sortedNames = [...names].sort((a, b) => b.localeCompare(a, 'en', { sensitivity: 'base' }));
+            }
             
-            cy.wrap(names, { timeout: 5000 }).should('deep.equal', expected);
+            console.log("sorted" + sortedNames);
+            expect(names).to.deep.equal(sortedNames);
         });
     }
 
