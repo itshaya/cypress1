@@ -18,6 +18,7 @@ Given('there is a one category exist at least', () => {
 });
 
 When('user clicks the Add Category button', () => {
+    cy.wait(1000);
     CategoriesActions.clickAddCategoryButton();
 });
 
