@@ -38,28 +38,31 @@ export class CategoriesAssertions {
     }
 
     static verifyCategoriesSortedByName(sortType: SortingType) {
-        
         cy.get('tr.table-body-row', { timeout: 10000 }).should('have.length.at.least', 1);
-        
+
+        // Optional: wait for a known category that confirms the UI updated
+        const waitForName = sortType === 'ascending' ? 'testCategory-0' : 'updated-category';
         cy.get('tr.table-body-row td:first-child')
-            .then(($cells) => {
-                const names: string[] = Array.from($cells, el => el.textContent?.trim() || '');
+            .contains(waitForName, { timeout: 5000 }) // Wait for the expected item to show up
+            .should('be.visible');
 
-                cy.log('Actual names:', JSON.stringify(names));
-                console.log("Actual names:", names);
+        // Now collect all names
+        cy.get('tr.table-body-row td:first-child').then(($cells) => {
+            const names: string[] = Array.from($cells, el => el.textContent?.trim() || '');
+            console.log("Actual names:", names);
 
-                const sortedNames = [...names].sort((a, b) =>
-                    sortType === 'ascending'
-                        ? a.localeCompare(b, 'en', { sensitivity: 'base' })
-                        : b.localeCompare(a, 'en', { sensitivity: 'base' })
-                );
+            const sortedNames = [...names].sort((a, b) =>
+                sortType === 'ascending'
+                    ? a.localeCompare(b, 'en', { sensitivity: 'base' })
+                    : b.localeCompare(a, 'en', { sensitivity: 'base' })
+            );
 
-                cy.log('Expected sorted names:', JSON.stringify(sortedNames));
-                console.log("Expected sorted names:", sortedNames);
+            console.log("Expected sorted names:", sortedNames);
 
-                expect(names, 'Names should be sorted correctly').to.deep.equal(sortedNames);
-            });
+            expect(names, 'Names should be sorted correctly').to.deep.equal(sortedNames);
+        });
     }
+
 
 
 
