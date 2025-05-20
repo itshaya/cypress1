@@ -44,7 +44,7 @@ export class CategoriesActions {
         cy.get('button').contains('Next').then(($btn) => {
             if (!$btn.prop('disabled')) {
                 cy.wrap($btn).click();
-                CategoriesActions.clickUntilDisabled();
+                this.clickUntilDisabled();
             }
         });
     }
@@ -99,7 +99,7 @@ export class CategoriesActions {
     static fillEditFormAndClick(name: string) {
         this.clickEditButton();
         cy.clearAndType('#name', name);
-        cy.get('button').contains('Submit').click();
+        this.clickSubmitButton();
     }
 
     static cancelCategoryEdit(categoryIntercepted: boolean) {
@@ -122,7 +122,7 @@ export class CategoriesActions {
                 const deletedName = text.trim();
                 cy.wrap(deletedName).as('deletedName')
             });
-        cy.get('button').contains('Submit').click();
+        this.clickSubmitButton();
         cy.wait(500);
     }
 

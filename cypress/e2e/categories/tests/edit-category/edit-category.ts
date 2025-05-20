@@ -20,36 +20,36 @@ When('the table of categories is displayed', () => {
     CategoriesActions.displayTableCategories();
 })
 
-Then('Each category should have an edit button beside it', () => {
-    CategoriesAssertions.verifyEachCategoryHasEditButton();
-})
-
 When('the user clicks the edit button for a category', () => {
     CategoriesActions.clickTheEditButton();
-})
-
-Then('a form should open prefilled with the category name', () => {
-    CategoriesAssertions.verifyEditFormOpenWithPrefilledCategoryName();
 })
 
 When('the user edits the category and enters a new name', () => {
     CategoriesActions.fillEditFormAndClick(updatedName);
 })
 
-Then('The category should appear with the updated name in the table', () => {
-    CategoriesAssertions.verifyCategoryUpdatedSuccessfully(updatedName);
-})
-
 When('the user attempts to edit a category name with an existing category name', () => {
     CategoriesActions.fillEditFormAndClick(existingCategory.name);
 })
 
-Then('The system should prevent the edit and display a validation message', () => {
-    CategoriesAssertions.verifyCategoryExistMessageVisibility();
-})
-
 When('the user attempts to edit a category name and cancels the edit process', () => {
     CategoriesActions.cancelCategoryEdit(categoryIntercepted);
+})
+
+Then('Each category should have an edit button beside it', () => {
+    CategoriesAssertions.verifyEachCategoryHasEditButton();
+})
+
+Then('a form should open prefilled with the category name', () => {
+    CategoriesAssertions.verifyEditFormOpenWithPrefilledCategoryName();
+})
+
+Then('The category should appear with the updated name in the table', () => {
+    CategoriesAssertions.verifyCategoryUpdatedSuccessfully(updatedName);
+})
+
+Then('The system should prevent the edit and display a validation message', () => {
+    CategoriesAssertions.verifyCategoryExistMessageVisibility();
 })
 
 Then('the system should discard any changes and leave the category unchanged', () => {

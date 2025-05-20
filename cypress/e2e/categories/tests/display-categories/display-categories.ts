@@ -26,6 +26,7 @@ When('user clicks the Next or Previous button', () => {
 When('The user selects a specific number of items per page', () => {
     CategoriesActions.selectItemsPerPage(itemNum);
 })
+
 When('user resizes the browser window or uses a mobile device', () => {
     CategoriesActions.changeViewPortToDevice();
 })

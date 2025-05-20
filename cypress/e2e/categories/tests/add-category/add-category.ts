@@ -21,7 +21,6 @@ When('user clicks the Add Category button', () => {
     CategoriesActions.clickAddCategoryButton();
 });
 
-
 When('leaves the category name field empty and clicks submit', () => {
     CategoriesActions.clickSubmitButton();
 });

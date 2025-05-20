@@ -19,12 +19,12 @@ When('the user sorts the {string} column in {word} order', (columnName: ColumnNa
     CategoriesActions.clickSortButton(columnName, sortType);
 });
 
-Then('categories should be displayed in {word} order according to {string}', (sortType: SortingType, columnName: ColumnName) => {
-    verifySortedColumn(columnName, sortType);
-});
-
 When('The user enters name in the search field', () => {
     CategoriesActions.typeInSearchField(searchTerm);
+});
+
+Then('categories should be displayed in {word} order according to {string}', (sortType: SortingType, columnName: ColumnName) => {
+    verifySortedColumn(columnName, sortType);
 });
 
 Then('Only categories with names should be displayed', () => {

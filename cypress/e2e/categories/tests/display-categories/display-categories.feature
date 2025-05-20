@@ -15,7 +15,6 @@ Feature: Display Categories in a Paginated Table
 
   @TC_003
   Scenario: Verify that user can control the number of items displayed per page
-    And at least number of categories exist
     When The user selects a specific number of items per page
     Then Then The system should display the selected number of categories per page
 
