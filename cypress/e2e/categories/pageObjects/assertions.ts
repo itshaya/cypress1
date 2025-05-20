@@ -39,20 +39,29 @@ export class CategoriesAssertions {
 
     static verifyCategoriesSortedByName(sortType: SortingType) {
         const names: string[] = [];
-        cy.wait(500);
+        cy.get('tr.table-body-row', { timeout: 10000 }).should('have.length.at.least', 1);
+
         cy.get('tr.table-body-row td:first-child').each(($el) => {
-            names.push($el.text().trim());
+            const text = $el.text().trim();
+            names.push(text);
         }).then(() => {
-            let sortedNames;
+            cy.log('Actual names: ' + JSON.stringify(names));
+            console.log("Actual names:", names);
+
+            let sortedNames: string[];
             if (sortType === 'ascending') {
                 sortedNames = [...names].sort((a, b) => a.localeCompare(b, 'en', { sensitivity: 'base' }));
             } else {
                 sortedNames = [...names].sort((a, b) => b.localeCompare(a, 'en', { sensitivity: 'base' }));
             }
 
-            expect(names).to.deep.equal(sortedNames);
+            cy.log('Expected sorted names: ' + JSON.stringify(sortedNames));
+            console.log("Expected sorted names:", sortedNames);
+
+            expect(names, 'Names should be sorted correctly').to.deep.equal(sortedNames);
         });
     }
+
 
     static verifyCategoriesSortedByCreatedAt(sortType: SortingType) {
         cy.get('tr.table-body-row td:nth-child(2)').then(($cells) => {
