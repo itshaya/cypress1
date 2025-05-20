@@ -10,6 +10,7 @@ Feature: Sorting and Searching Functionality
 
     Examples:
       | columnName | sortType   |
+      | Name       | ascending  |
       | Name       | descending |
       | CreatedAt  | ascending  |
       | CreatedAt  | descending |

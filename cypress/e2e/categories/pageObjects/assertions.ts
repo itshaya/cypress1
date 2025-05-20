@@ -38,23 +38,27 @@ export class CategoriesAssertions {
     }
 
     static verifyCategoriesSortedByName(sortType: SortingType) {
-        const names: string[] = [];
+        
+        cy.get('tr.table-body-row', { timeout: 10000 }).should('have.length.at.least', 1);
+        
+        cy.get('tr.table-body-row td:first-child')
+            .then(($cells) => {
+                const names: string[] = Array.from($cells, el => el.textContent?.trim() || '');
 
-        cy.get('tr.table-body-row td:first-child').each(($el) => {
-            names.push($el.text().trim());
-        }).then(() => {
+                cy.log('Actual names:', JSON.stringify(names));
+                console.log("Actual names:", names);
 
-            console.log("actaul" + names);
-            let sortedNames;
-            if (sortType === 'ascending') {
-                sortedNames = [...names].sort((a, b) => a.localeCompare(b, 'en', { sensitivity: 'base' }));
-            } else {
-                sortedNames = [...names].sort((a, b) => b.localeCompare(a, 'en', { sensitivity: 'base' }));
-            }
+                const sortedNames = [...names].sort((a, b) =>
+                    sortType === 'ascending'
+                        ? a.localeCompare(b, 'en', { sensitivity: 'base' })
+                        : b.localeCompare(a, 'en', { sensitivity: 'base' })
+                );
 
-            console.log("sorted" + sortedNames);
-            expect(names).to.deep.equal(sortedNames);
-        });
+                cy.log('Expected sorted names:', JSON.stringify(sortedNames));
+                console.log("Expected sorted names:", sortedNames);
+
+                expect(names, 'Names should be sorted correctly').to.deep.equal(sortedNames);
+            });
     }
 
 
