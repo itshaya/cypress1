@@ -33,14 +33,9 @@ export class CategoriesAssertions {
             .should('have.length.at.most', num);
     }
 
-    static verifyNextButtonDisabled() {
-        cy.get('button').contains('Next').should('be.disabled');
+    static verifyButtonDisabled(button: 'Previous' | 'Next') {
+        cy.get('button').contains(button).should('be.disabled');
     }
-
-    static verifyPreviousButtonDisabled() {
-        cy.get('button').contains('Previous').should('be.disabled');
-    }
-
 
     static verifyCategoriesSortedByName(sortType: SortingType) {
         const names: string[] = [];
@@ -56,7 +51,7 @@ export class CategoriesAssertions {
             } else {
                 sortedNames = [...names].sort((a, b) => b.localeCompare(a, 'en', { sensitivity: 'base' }));
             }
-            
+
             console.log("sorted" + sortedNames);
             expect(names).to.deep.equal(sortedNames);
         });
@@ -130,15 +125,13 @@ export class CategoriesAssertions {
         });
     }
 
-    static verifyCategoryUpdatedSuccessfully() {
+    static verifyCategoryUpdatedSuccessfully(name: string) {
         cy.wait(1000);
-        cy.get('@newName').then((newName) => {
-            cy.get('.table-body tr').eq(0).find('td').eq(0)
-                .invoke('text')
-                .then((text) => {
-                    expect(text.trim()).to.eq(newName);
-                });
-        });
+        cy.get('.table-body tr').eq(0).find('td').eq(0)
+            .invoke('text')
+            .then((text) => {
+                expect(text.trim()).to.eq(name);
+            });
     }
 
     static verifyCategoryRemovedFromTable() {

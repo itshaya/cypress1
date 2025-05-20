@@ -1,21 +1,19 @@
-import { Given, When, Then, BeforeAll, AfterAll } from "@badeball/cypress-cucumber-preprocessor";
+import { When, Then, BeforeAll, AfterAll } from "@badeball/cypress-cucumber-preprocessor";
 import { CategoriesActions } from "../../pageObjects/actions";
 import { CategoriesAssertions } from "../../pageObjects/assertions";
-import { createCategory, deleteTestedCategories, generateTestCategories } from "../../utils";
+import { createCategory, deleteTestedCategories, generateTestCategories, generateTestCategory } from "../../utils";
 
-
+const updatedName = 'updated-category' + Date.now();
 const categoryIntercepted = false;
+const existingCategory = generateTestCategory(0);
 
 BeforeAll(() => {
     createCategory(generateTestCategories(3));
+    createCategory([existingCategory]);
 });
 
 beforeEach(() => {
     cy.login();
-});
-
-Given('user navigates to the Categories page', () => {
-    CategoriesActions.openCategoriesPage();
 });
 
 When('the table of categories is displayed', () => {
@@ -35,17 +33,15 @@ Then('a form should open prefilled with the category name', () => {
 })
 
 When('the user edits the category and enters a new name', () => {
-    CategoriesActions.editCategoryWithNewName();
+    CategoriesActions.fillEditFormAndClick(updatedName);
 })
 
 Then('The category should appear with the updated name in the table', () => {
-    CategoriesAssertions.verifyCategoryUpdatedSuccessfully();
+    CategoriesAssertions.verifyCategoryUpdatedSuccessfully(updatedName);
 })
 
 When('the user attempts to edit a category name with an existing category name', () => {
-    CategoriesActions.getExistingCategoryName((name) => {
-        CategoriesActions.fillEditFormAndClick(name);
-    });
+    CategoriesActions.fillEditFormAndClick(existingCategory.name);
 })
 
 Then('The system should prevent the edit and display a validation message', () => {

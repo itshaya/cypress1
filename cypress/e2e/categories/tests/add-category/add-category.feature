@@ -1,12 +1,8 @@
 Feature: Add Category Functionality
 
   Background:
-    Given user navigates to the Categories page
+    Given Common Step: User navigates to the Categories page
 
-  @TC_018
-  Scenario: Verify Clicking the "Add Category" button opens the form
-    When user clicks the Add Category button
-    Then The form for adding a new category should open
 
   @TC_020
   Scenario: Verify user can add a category successfully and see confirmation

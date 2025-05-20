@@ -1,17 +1,16 @@
 Feature: Display Categories in a Paginated Table
 
   Background:
-    Given user navigates to the Categories page
+    Given Common Step: User navigates to the Categories page
 
   @TC_001
   Scenario: Verify Displaying Categories with correct Timestamps format
     When the list of categories is loaded
-    Then each category row should display a "Created At" timestamp in "YYYY-M-DD HH:M:S" format
+    Then each category row should display a Created At timestamp in YYYY-M-DD HH:M:S format
 
   @TC_002
   Scenario: :Verify that  user can navigate between pages using Next/Previous buttons
-    And 5 categories exist at least
-    When user clicks the "Next" or "Previous" button
+    When user clicks the Next or Previous button
     Then The system should navigate to the selected page and update the displayed categories
 
   @TC_003
@@ -26,11 +25,8 @@ Feature: Display Categories in a Paginated Table
     Then The table layout should remain readable and properly formatted
 
   @TC_007
-  Scenario: Verify Next button is disabled on the last page
-    When The user reaches the last page
-    Then The "Next" button should be disabled
-
-  @TC_008
-  Scenario: Verify Previous button is disabled on the first page
+  Scenario: Verify pagination buttons are disabled on boundary pages
     When The user is on the first page of categories
     Then The "Previous" button should be disabled
+    When The user navigates to the last page
+    Then The "Next" button should be disabled

@@ -1,4 +1,4 @@
-import { AfterAll, BeforeAll, Given, Then, When } from "@badeball/cypress-cucumber-preprocessor";
+import { AfterAll, BeforeAll, Then, When } from "@badeball/cypress-cucumber-preprocessor";
 import { CategoriesActions } from "../../pageObjects/actions";
 import { CategoriesAssertions } from "../../pageObjects/assertions";
 import { createCategory, deleteTestedCategories, generateTestCategories, generateTestCategory, verifySortedColumn } from "../../utils";
@@ -8,17 +8,12 @@ const searchTerm = 'searchItem' + Date.now();
 
 BeforeAll(() => {
     createCategory(generateTestCategories(5));
-    createCategory([generateTestCategory(searchTerm)]);
+    createCategory([generateTestCategory(0, searchTerm)]);
 });
 
 beforeEach(() => {
     cy.login();
 });
-
-Given('user navigates to the Categories page', () => {
-    CategoriesActions.openCategoriesPage();
-})
-
 
 When('the user sorts the {string} column in {word} order', (columnName: ColumnName, sortType: SortingType) => {
     CategoriesActions.clickSortButton(columnName, sortType);

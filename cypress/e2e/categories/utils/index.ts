@@ -12,11 +12,11 @@ export const createCategory = (categories: Category[]) => {
   });
 };
 
-export const generateTestCategory = (name?: string): Category => {
+export const generateTestCategory = (index: number, name?: string): Category => {
   const timestamp = Date.now();
   return {
-    id: `test-category-id-${timestamp}`,
-    name: name ?? `testCategory-${timestamp}`,
+    id: `test-category-id-${index}`,
+    name: name ?? `testCategory-${index}`,
     description: 'new category',
     createdAt: timestamp,
     updatedAt: timestamp,
@@ -24,7 +24,7 @@ export const generateTestCategory = (name?: string): Category => {
 };
 
 export const generateTestCategories = (count: number): Category[] => {
-  return Array.from({ length: count }, () => generateTestCategory());
+  return Array.from({ length: count }, (_,i) => generateTestCategory(i));
 };
 
 

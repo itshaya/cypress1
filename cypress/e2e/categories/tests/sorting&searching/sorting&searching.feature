@@ -1,7 +1,7 @@
 Feature: Sorting and Searching Functionality
 
   Background:
-    Given user navigates to the Categories page
+   Given Common Step: User navigates to the Categories page
 
   @TC_010 @TC_011 @TC_012 @TC_013
   Scenario Outline: Verify categories are sorted correctly by <columnName> in <sortType> order

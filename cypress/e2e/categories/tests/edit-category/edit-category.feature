@@ -1,6 +1,7 @@
 Feature: Edit Category Functionality
 
-  Background: Given user navigates to the Categories page
+  Background:
+    Given Common Step: User navigates to the Categories page
 
   @smoke
   Scenario: Verify the Appearance of the Edit Button

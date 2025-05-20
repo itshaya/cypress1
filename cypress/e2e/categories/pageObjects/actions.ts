@@ -65,32 +65,6 @@ export class CategoriesActions {
         cy.get('#search').clear().type(searchTerm);
     }
 
-    static findCategoryAcrossPages(categoryName: string) {
-        cy.wait(1000);
-        const checkCategory = () => {
-            cy.get('tbody.table-body td').then(($tds) => {
-                const found = [...$tds].some(td => td.innerText.trim() === categoryName);
-                if (found) {
-                    cy.log(`Category "${categoryName}" found.`);
-                    return;
-                }
-
-                cy.get('button').contains('Next').then($btn => {
-                    if (!$btn.is(':disabled')) {
-                        cy.wrap($btn).click();
-                        cy.wait(500);
-                        checkCategory();
-                    } else {
-                        throw new Error(`Category "${categoryName}" not found in any page.`);
-                    }
-                });
-            });
-        };
-
-        checkCategory();
-
-    }
-
     static clickSubmitButton() {
         cy.get('button').contains('Submit').click();
     }
@@ -98,18 +72,6 @@ export class CategoriesActions {
     static addNewCategory(newCategoryName: string) {
         cy.clearAndType('#name', newCategoryName);
         this.clickSubmitButton();
-    }
-
-    static getExistingCategoryName(callback: (name: string) => void): void {
-        cy.get('table tr')
-            .eq(1)
-            .find('td')
-            .eq(0)
-            .invoke('text')
-            .then((text) => {
-                const name = text.trim();
-                callback(name);
-            });
     }
 
     static cancelAddingProcess(categoryIntercepted: boolean) {
@@ -140,12 +102,6 @@ export class CategoriesActions {
         cy.get('button').contains('Submit').click();
     }
 
-    static editCategoryWithNewName() {
-        const editedName = 'updated-category' + Date.now();
-        cy.wrap(editedName).as("newName");
-        this.fillEditFormAndClick(editedName);
-    }
-
     static cancelCategoryEdit(categoryIntercepted: boolean) {
         this.clickEditButton();
         cy.intercept('PUT', '**/categories', (req) => {
@@ -169,7 +125,7 @@ export class CategoriesActions {
         cy.get('button').contains('Submit').click();
         cy.wait(500);
     }
-    
+
 
 
 }
