@@ -59,6 +59,7 @@ export class CategoriesActions {
         if (sortType === "ascending") {
             cy.get('.sort-btn').eq(columnIndex).click();
         }
+        cy.wait(1000);
     }
 
     static typeInSearchField(searchTerm: string) {

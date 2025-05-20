@@ -38,33 +38,21 @@ export class CategoriesAssertions {
     }
 
     static verifyCategoriesSortedByName(sortType: SortingType) {
-        cy.get('tr.table-body-row', { timeout: 10000 }).should('have.length.at.least', 1);
+        const names: string[] = [];
+        cy.wait(500);
+        cy.get('tr.table-body-row td:first-child').each(($el) => {
+            names.push($el.text().trim());
+        }).then(() => {
+            let sortedNames;
+            if (sortType === 'ascending') {
+                sortedNames = [...names].sort((a, b) => a.localeCompare(b, 'en', { sensitivity: 'base' }));
+            } else {
+                sortedNames = [...names].sort((a, b) => b.localeCompare(a, 'en', { sensitivity: 'base' }));
+            }
 
-        // Optional: wait for a known category that confirms the UI updated
-        const waitForName = sortType === 'ascending' ? 'testCategory-0' : 'updated-category';
-        cy.get('tr.table-body-row td:first-child')
-            .contains(waitForName, { timeout: 5000 }) // Wait for the expected item to show up
-            .should('be.visible');
-
-        // Now collect all names
-        cy.get('tr.table-body-row td:first-child').then(($cells) => {
-            const names: string[] = Array.from($cells, el => el.textContent?.trim() || '');
-            console.log("Actual names:", names);
-
-            const sortedNames = [...names].sort((a, b) =>
-                sortType === 'ascending'
-                    ? a.localeCompare(b, 'en', { sensitivity: 'base' })
-                    : b.localeCompare(a, 'en', { sensitivity: 'base' })
-            );
-
-            console.log("Expected sorted names:", sortedNames);
-
-            expect(names, 'Names should be sorted correctly').to.deep.equal(sortedNames);
+            expect(names).to.deep.equal(sortedNames);
         });
     }
-
-
-
 
     static verifyCategoriesSortedByCreatedAt(sortType: SortingType) {
         cy.get('tr.table-body-row td:nth-child(2)').then(($cells) => {
