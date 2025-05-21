@@ -8,4 +8,6 @@ RUN npm ci
 
 COPY . .
 
-CMD sh -c "npx cypress run && npm run merge:report"
+ENTRYPOINT []
+CMD ["sh", "-c", "npx cypress run && npm run merge:report"]
+
