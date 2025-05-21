@@ -20,7 +20,7 @@ jobs:
           node-version: "20.14"
 
       - name: Build cypress Docker image
-        run: docker build -t cypress-tests .
+        run: docker build -t cypress-tests . 
 
       - name: Run Cypress Tests in Docker
         run: docker run --rm -v ${{ github.workspace }}/cypress/reports:/e2e/cypress/reports cypress-tests
