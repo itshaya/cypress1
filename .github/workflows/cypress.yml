@@ -19,11 +19,11 @@ jobs:
         with:
           node-version: "20.14"
 
-      - name: Install Dependencies
-        run: npm ci
+      - name: Build cypress Docker image 
+        run: docker build -t cypress-tests .
 
-      - name: Run Cypress Tests
-        run: npx cypress run
+      - name: Run Cypress Tests in Docker
+        run: docker run --rm -v ${{ github.workspace }}/cypress/reports:/e2e/cypress/reports cypress-tests
 
       - name: Merge and Generate Mochawesome Report
         run: npm run merge:report
