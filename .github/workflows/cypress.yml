@@ -19,15 +19,14 @@ jobs:
         with:
           node-version: "20.14"
 
-      - name: Build cypress Docker image 
+      - name: Build cypress Docker image
         run: docker build -t cypress-tests .
 
       - name: Run Cypress Tests in Docker
         run: docker run --rm -v ${{ github.workspace }}/cypress/reports:/e2e/cypress/reports cypress-tests
 
-      - name: Merge and Generate Mochawesome Report
-        run: npm run merge:report
-
+      - name: Fix permissions on report folder
+        run: sudo chown -R $USER:$USER cypress/reports
       - name: Upload Mochawesome Report
         uses: actions/upload-artifact@v4
         with:
