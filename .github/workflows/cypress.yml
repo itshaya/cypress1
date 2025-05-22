@@ -1,0 +1,34 @@
+name: Run Cypress Tests with Mochawesome
+
+on:
+  push:
+    branches: [CYP-23-Add-automation-tests-for-categories-page]
+  pull_request:
+    branches: [CYP-23-Add-automation-tests-for-categories-page]
+
+jobs:
+  cypress-run:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "20.14"
+
+      - name: Build cypress Docker image
+        run: docker build -t cypress-tests .
+
+      - name: Run Cypress Tests in Docker
+        run: docker run --rm -v ${{ github.workspace }}/cypress/reports:/e2e/cypress/reports cypress-tests
+
+      - name: Fix permissions on report folder
+        run: sudo chown -R $USER:$USER cypress/reports
+      - name: Upload Mochawesome Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: mochawesome-report
+          path: cypress/reports/mochawesome/
