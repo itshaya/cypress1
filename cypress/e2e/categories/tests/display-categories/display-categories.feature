@@ -9,7 +9,7 @@ Feature: Display Categories in a Paginated Table
     Then each category row should display a Created At timestamp in YYYY-M-DD HH:M:S format
 
   @TC_002
-  Scenario: :Verify that  user can navigate between pages using Next/Previous buttons
+  Scenario: Verify that  user can navigate between pages using Next/Previous buttons
     When user clicks the Next or Previous button
     Then The system should navigate to the selected page and update the displayed categories
 

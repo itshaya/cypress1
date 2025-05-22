@@ -1,4 +1,3 @@
-import cypress from "cypress";
 import { SortingType } from "../fixtures/data";
 import { url } from "../utils";
 export class CategoriesAssertions {

@@ -112,12 +112,12 @@ export class CategoriesActions {
     }
 
     static clickDeleteCategoryButton() {
-        cy.get('.table-body tr').eq(0).find('td').as('firstRow')
+        cy.get('.table-body tr').eq(0).find('td').as('firstRow');
         cy.get('@firstRow').eq(2).find('button').eq(0).click();
     }
 
     static deletesCategorySuccessfully() {
-        cy.get('.table-body tr').eq(0).find('td').as('firstRow').eq(0)
+        cy.get('.table-body tr').eq(0).find('td').eq(0)
             .invoke('text')
             .then((text) => {
                 const deletedName = text.trim();
