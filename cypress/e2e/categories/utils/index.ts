@@ -40,11 +40,3 @@ export const deleteTestedCategories = () => {
       }
     });
 };
-
-export function verifySortedColumn(columnName: ColumnName, sortType: SortingType) {
-  if (columnName === "Name") {
-    CategoriesAssertions.verifyCategoriesSortedByName(sortType);
-  } else {
-    CategoriesAssertions.verifyCategoriesSortedByCreatedAt(sortType);
-  }
-}

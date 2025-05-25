@@ -1,7 +1,51 @@
-import { SortingType } from "../fixtures/data";
+import { ColumnName, SortingType } from "../fixtures/data";
 import { url } from "../utils";
 export class CategoriesAssertions {
 
+    private static verifyCategoriesSortedByName(sortType: SortingType) {
+        const names: string[] = [];
+        cy.get('tr.table-body-row', { timeout: 10000 }).should('have.length.at.least', 1);
+
+        cy.get('tr.table-body-row td:first-child').each(($el) => {
+            const text = $el.text().trim();
+            names.push(text);
+        }).then(() => {
+            cy.log('Actual names: ' + JSON.stringify(names));
+            console.log("Actual names:", names);
+
+            let sortedNames: string[];
+            if (sortType === 'ascending') {
+                sortedNames = [...names].sort((a, b) => a.localeCompare(b, 'en', { sensitivity: 'base' }));
+            } else {
+                sortedNames = [...names].sort((a, b) => b.localeCompare(a, 'en', { sensitivity: 'base' }));
+            }
+
+            cy.log('Expected sorted names: ' + JSON.stringify(sortedNames));
+            console.log("Expected sorted names:", sortedNames);
+
+            expect(names, 'Names should be sorted correctly').to.deep.equal(sortedNames);
+        });
+    }
+
+
+    private static verifyCategoriesSortedByCreatedAt(sortType: SortingType) {
+        cy.get('tr.table-body-row td:nth-child(2)').then(($cells) => {
+            const dates = [...$cells].map((el) => {
+                const text = el.textContent?.trim() || '';
+                const parsedDate = new Date(text.replace(/-/g, '/'));
+                return parsedDate;
+            });
+
+            const sortedDates = [...dates].sort((a, b) =>
+                sortType === 'ascending'
+                    ? a.getDate() - b.getDate()
+                    : b.getDate() - a.getDate()
+            );
+
+            expect(dates).to.deep.equal(sortedDates);
+        });
+    }
+    
     static verifyCreatedAtFormat() {
         const TIME_REGEX = /^\d{4}-\d{1,2}-\d{1,2} \d{1,2}:\d{1,2}:\d{1,2}$/;
         cy.get('@table-rows').each(($row) => {
@@ -36,49 +80,6 @@ export class CategoriesAssertions {
         cy.get('button').contains(button).should('be.disabled');
     }
 
-    static verifyCategoriesSortedByName(sortType: SortingType) {
-        const names: string[] = [];
-        cy.get('tr.table-body-row', { timeout: 10000 }).should('have.length.at.least', 1);
-
-        cy.get('tr.table-body-row td:first-child').each(($el) => {
-            const text = $el.text().trim();
-            names.push(text);
-        }).then(() => {
-            cy.log('Actual names: ' + JSON.stringify(names));
-            console.log("Actual names:", names);
-
-            let sortedNames: string[];
-            if (sortType === 'ascending') {
-                sortedNames = [...names].sort((a, b) => a.localeCompare(b, 'en', { sensitivity: 'base' }));
-            } else {
-                sortedNames = [...names].sort((a, b) => b.localeCompare(a, 'en', { sensitivity: 'base' }));
-            }
-
-            cy.log('Expected sorted names: ' + JSON.stringify(sortedNames));
-            console.log("Expected sorted names:", sortedNames);
-
-            expect(names, 'Names should be sorted correctly').to.deep.equal(sortedNames);
-        });
-    }
-
-
-    static verifyCategoriesSortedByCreatedAt(sortType: SortingType) {
-        cy.get('tr.table-body-row td:nth-child(2)').then(($cells) => {
-            const dates = [...$cells].map((el) => {
-                const text = el.textContent?.trim() || '';
-                const parsedDate = new Date(text.replace(/-/g, '/'));
-                return parsedDate;
-            });
-
-            const sortedDates = [...dates].sort((a, b) =>
-                sortType === 'ascending'
-                    ? a.getDate() - b.getDate()
-                    : b.getDate() - a.getDate()
-            );
-
-            expect(dates).to.deep.equal(sortedDates);
-        });
-    }
 
     static verifyCategoriesWithNameDisplayed(searchTerm: string) {
         cy.get('tr.table-body-row td:nth-child(1)').each(($cell) => {
@@ -157,6 +158,14 @@ export class CategoriesAssertions {
 
     static verifyDeleteModalVisible() {
         cy.get('.modal__content').should('be.visible');
+    }
+
+    static verifySortedColumn(columnName: ColumnName, sortType: SortingType) {
+        if (columnName === "Name") {
+            CategoriesAssertions.verifyCategoriesSortedByName(sortType);
+        } else {
+            CategoriesAssertions.verifyCategoriesSortedByCreatedAt(sortType);
+        }
     }
 
 }

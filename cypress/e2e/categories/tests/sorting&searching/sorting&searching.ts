@@ -1,7 +1,7 @@
 import { AfterAll, BeforeAll, Then, When } from "@badeball/cypress-cucumber-preprocessor";
 import { CategoriesActions } from "../../pageObjects/actions";
 import { CategoriesAssertions } from "../../pageObjects/assertions";
-import { createCategory, deleteTestedCategories, generateTestCategories, generateTestCategory, verifySortedColumn } from "../../utils";
+import { createCategory, deleteTestedCategories, generateTestCategories, generateTestCategory } from "../../utils";
 import { ColumnName, SortingType } from "../../fixtures/data";
 
 const searchTerm = 'searchItem' + Date.now();
@@ -24,7 +24,7 @@ When('The user enters name in the search field', () => {
 });
 
 Then('categories should be displayed in {word} order according to {string}', (sortType: SortingType, columnName: ColumnName) => {
-    verifySortedColumn(columnName, sortType);
+    CategoriesAssertions.verifySortedColumn(columnName, sortType);
 });
 
 Then('Only categories with names should be displayed', () => {
